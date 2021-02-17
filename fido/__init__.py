@@ -1,5 +1,1 @@
-from .config import *
-from .errors import *
-from .robot import *
-from .simulation import *
-from .world import *
+__path__ = __import__('pkgutil').extend_path(__path__, __name__)
