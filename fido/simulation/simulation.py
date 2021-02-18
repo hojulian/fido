@@ -1,6 +1,7 @@
 from future.utils import raise_from
 
 from .simulator import Simulator
+from ..world import World
 from ..errors import SimulatorError, SimulationError
 
 
@@ -13,7 +14,7 @@ class Simulation(object):
     Note that both the simulator and world need to be compatible.
     """
 
-    def __init__(self, simulator: Simulator, world, use_sim_time=True):
+    def __init__(self, simulator: Simulator, world: World, use_sim_time=True):
         self._simulator = simulator
         self._world = world
         self._use_sim_time = use_sim_time

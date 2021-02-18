@@ -12,11 +12,11 @@ def set_docker_host(base_url="tcp://127.0.0.1:1234", version="1.35"):
         base_url (str): URL to Docker server. For example,
             `unix:///var/run/docker.sock` or `tcp://127.0.0.1:1234`. Default:
             `tcp://127.0.0.1:1234`.
-        version (str): The version of the API to use. Set to `auto` to 
+        version (str): The version of the API to use. Set to `auto` to
             automatically detect the server's version. Default: `1.35`.
 
     Raises:
-        fd.errors.DockerError: If the specified Docker server does not exist, 
+        fd.errors.DockerError: If the specified Docker server does not exist,
         or failed to connect.
     """
 
@@ -30,7 +30,7 @@ def set_docker_host(base_url="tcp://127.0.0.1:1234", version="1.35"):
 def set_logging(node_name, level):
     """Enable logging for a given node, and its logging level.
 
-    This is a legacy feature inherited from `robot_services`. See 
+    This is a legacy feature inherited from `robot_services`. See
     `robot_services`'s documentation for more details.
 
     Args:

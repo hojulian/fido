@@ -12,7 +12,8 @@ class Simulator(object):
     Currently, there is only one supported simulator implementation: Gazebo.
     """
 
-    def __init__(self):
+    def __init__(self, gui=True):
+        self._gui = gui
         super().__init__()
 
     def start(self):
