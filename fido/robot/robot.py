@@ -12,8 +12,6 @@ class Robot(object):
 
     def __init__(self, name):
         self._name = name
-        super().__init__()
-        super().__init__()
 
     def move(self, distance, duration, speed):
         """Move the robot at a certain distance at a certain speed or for a

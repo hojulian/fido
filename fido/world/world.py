@@ -7,9 +7,6 @@ class World(object):
     Currently this is only compatible with Gazebo.
     """
 
-    def __init__(self):
-        super().__init__()
-
     def add(self, robot: Robot, x, y, z):
         """Add a robot to the world.
 

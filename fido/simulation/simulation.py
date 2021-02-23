@@ -1,6 +1,11 @@
+from random import randint
+from uuid import uuid4
 from future.utils import raise_from
 
+from docker.errors import NotFound, APIError
+
 from .simulator import Simulator
+from ..core import _docker_client
 from ..world import World
 from ..errors import SimulatorError, SimulationError
 
@@ -14,11 +19,28 @@ class Simulation(object):
     Note that both the simulator and world need to be compatible.
     """
 
-    def __init__(self, simulator: Simulator, world: World, use_sim_time=True):
+    def __init__(
+        self, image, simulator: Simulator, world: World, use_sim_time=True
+    ):
         self._simulator = simulator
         self._world = world
         self._use_sim_time = use_sim_time
-        super().__init__()
+
+        self._id = str(uuid4())
+        self._container_port = randint(8000, 8080)
+        self._create_container(image)
+
+    def _create_container(self, image):
+        try:
+            self._container = _docker_client.create(
+                image,
+                name=f"fido-simulation-{self._id}",
+                hostname="fido-simulation",
+                ports={"80/tcp": self._container_port},
+                cap_add=["NET_ADMIN"],
+            )
+        except (NotFound, APIError) as exc:
+            raise_from(SimulationError("failed to create container"), exc)
 
     def start(self):
         """Start the simulation.

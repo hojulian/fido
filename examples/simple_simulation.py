@@ -13,7 +13,11 @@ def main():
         world = RaceTrack()
         world.add(robot, x=0, y=0, z=0)
 
-        sim = Simulation(simulator=Gazebo(gui=True), world=world)
+        sim = Simulation(
+            image="cosi119/fido-simulation:base",
+            simulator=Gazebo(gui=True),
+            world=world,
+        )
         sim.start()
         sim.view()
         robot.start()
