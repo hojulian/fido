@@ -1,7 +1,7 @@
 class Error(Exception):
     """A generic error that is raised when Fido execution fails.
 
-    Whenever possible, the session will raise a more specific subclass of 
+    Whenever possible, the session will raise a more specific subclass of
     `Error` from the `fido.errors` module.
     """
 
@@ -79,8 +79,7 @@ class DockerError(Error):
 
 
 class NotImplementedError(Error):
-    """Represents an error for calling a not yet implemented method.
-    """
+    """Represents an error for calling a not yet implemented method."""
 
     def __init__(self, msg):
         super(NotImplementedError, self).__init__(msg)

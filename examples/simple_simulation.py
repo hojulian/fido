@@ -1,6 +1,5 @@
 import os
 import sys
-import fido as fd
 
 from fido.simulation import Simulation, Gazebo
 from fido.world import RaceTrack

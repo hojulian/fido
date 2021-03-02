@@ -10,8 +10,7 @@ class Stack(object):
 
     def __init__(self, layers):
         self._layers = layers
-    
+
     def model(self):
-        """Converts the stack representation into a `fido.robot.model.Model`.
-        """
+        """Converts the stack representation into a `fido.robot.model.Model`."""
         pass

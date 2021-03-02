@@ -18,7 +18,5 @@ class Model(object):
 
 
 def from_ros_urdf(path):
-    """Read and parse a ROS URDF file as `fido.robot.model.Model`.
-    """
+    """Read and parse a ROS URDF file as `fido.robot.model.Model`."""
     pass
-
