@@ -1,0 +1,10 @@
+{
+    "python.formatting.blackPath": ".venv/bin/black",
+    "python.formatting.provider": "black",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintPath": ".venv/bin/pylint",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestPath": ".venv/bin/pytest",
+    "python.sortImports.path": ".venv/bin/isort",
+}
