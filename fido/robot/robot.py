@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from future.utils import raise_from
 
 from ..errors import RobotError, NotImplementedError
 
@@ -25,10 +24,9 @@ class Robot(ABC):
         larger than the maximum speed, it will be set to the maximum
         speed.
         """
-        raise_from(
-            RobotError("failed to call method on abstract robot"),
-            NotImplementedError("move() not implemented"),
-        )
+        raise RobotError(
+            "failed to call method on abstract robot"
+        ) from NotImplementedError("move() not implemented")
 
     @abstractmethod
     def rotate(self, angle, duration, speed):
@@ -40,10 +38,9 @@ class Robot(ABC):
         larger  than the maximum speed, it will be set to the maximum
         speed.
         """
-        raise_from(
-            RobotError("failed to call method on abstract robot"),
-            NotImplementedError("rotate() not implemented"),
-        )
+        raise RobotError(
+            "failed to call method on abstract robot"
+        ) from NotImplementedError("rotate() not implemented")
 
     @abstractmethod
     def stop(self, forced=False):
@@ -52,10 +49,9 @@ class Robot(ABC):
         This is a blocking call. It will block execution until the robot
         is gracefully stopped unless `forced` is set to `True`.
         """
-        raise_from(
-            RobotError("failed to call method on abstract robot"),
-            NotImplementedError("stop() not implemented"),
-        )
+        raise RobotError(
+            "failed to call method on abstract robot"
+        ) from NotImplementedError("stop() not implemented")
 
     @abstractmethod
     def ros_urdf(self, path):
@@ -64,7 +60,6 @@ class Robot(ABC):
         Internally, this is a wrapper around the internal
         `fido.robot.Model.ros_urdf()` method.
         """
-        raise_from(
-            RobotError("failed to call method on abstract robot"),
-            NotImplementedError("ros_urdf() not implemented"),
-        )
+        raise RobotError(
+            "failed to call method on abstract robot"
+        ) from NotImplementedError("ros_urdf() not implemented")

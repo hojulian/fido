@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from future.utils import raise_from
 
 from ..errors import SimulatorError, NotImplementedError
 
@@ -22,10 +21,9 @@ class Simulator(ABC):
 
         This starts the clock of the simulator.
         """
-        raise_from(
-            SimulatorError("failed to call method on abstract simulator"),
-            NotImplementedError("start() not implemented"),
-        )
+        raise SimulatorError(
+            "failed to call method on abstract simulator"
+        ) from NotImplementedError("start() not implemented")
 
     @abstractmethod
     def stop(self):
@@ -33,10 +31,9 @@ class Simulator(ABC):
 
         This will stop the simulation time as well.
         """
-        raise_from(
-            SimulatorError("failed to call method on abstract simulator"),
-            NotImplementedError("stop() not implemented"),
-        )
+        raise SimulatorError(
+            "failed to call method on abstract simulator"
+        ) from NotImplementedError("stop() not implemented")
 
     @abstractmethod
     def reset(self):
@@ -49,10 +46,9 @@ class Simulator(ABC):
 
         The reset behavior depends on the simulator’s implementation.
         """
-        raise_from(
-            SimulatorError("failed to call method on abstract simulator"),
-            NotImplementedError("reset() not implemented"),
-        )
+        raise SimulatorError(
+            "failed to call method on abstract simulator"
+        ) from NotImplementedError("reset() not implemented")
 
     @abstractmethod
     def shutdown(self):
@@ -61,10 +57,9 @@ class Simulator(ABC):
         This will cause the simulator to exit. An error will be raised if the
         simulator exited with a non-zero exit code.
         """
-        raise_from(
-            SimulatorError("failed to call method on abstract simulator"),
-            NotImplementedError("shutdown() not implemented"),
-        )
+        raise SimulatorError(
+            "failed to call method on abstract simulator"
+        ) from NotImplementedError("shutdown() not implemented")
 
     @abstractmethod
     def view(self):
@@ -75,15 +70,13 @@ class Simulator(ABC):
 
         Currently, there is no way to adjust the view just yet.
         """
-        raise_from(
-            SimulatorError("failed to call method on abstract simulator"),
-            NotImplementedError("view() not implemented"),
-        )
+        raise SimulatorError(
+            "failed to call method on abstract simulator"
+        ) from NotImplementedError("view() not implemented")
 
     @abstractmethod
     def time(self):
         """Return the simulator time."""
-        raise_from(
-            SimulatorError("failed to call method on abstract simulator"),
-            NotImplementedError("time() not implemented"),
-        )
+        raise SimulatorError(
+            "failed to call method on abstract simulator"
+        ) from NotImplementedError("time() not implemented")

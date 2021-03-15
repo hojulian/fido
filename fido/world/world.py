@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from future.utils import raise_from
 
 from ..robot import Robot
 from ..errors import WorldError, NotImplementedError
@@ -18,10 +17,9 @@ class World(ABC):
         Internally, this is converted into a gazebo_ros spawn_model
         call.
         """
-        raise_from(
-            WorldError("failed to call method on abstract world"),
-            NotImplementedError("add() not implemented"),
-        )
+        raise WorldError(
+            "failed to call method on abstract world"
+        ) from NotImplementedError("add() not implemented")
 
     @abstractmethod
     def remove(self, robot: Robot):
@@ -30,15 +28,13 @@ class World(ABC):
         Internally, this is converted into a gazebo_ros delete_model
         call.
         """
-        raise_from(
-            WorldError("failed to call method on abstract world"),
-            NotImplementedError("remove() not implemented"),
-        )
+        raise WorldError(
+            "failed to call method on abstract world"
+        ) from NotImplementedError("remove() not implemented")
 
     @abstractmethod
     def gazebo_world(self, path):
         """Exports a gazebo compatible `.world` representation of the world."""
-        raise_from(
-            WorldError("failed to call method on abstract world"),
-            NotImplementedError("gazebo_world() not implemented"),
-        )
+        raise WorldError(
+            "failed to call method on abstract world"
+        ) from NotImplementedError("gazebo_world() not implemented")
