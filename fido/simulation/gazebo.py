@@ -1,6 +1,6 @@
-from future.utils import raise_from
+from IPython.display import IFrame
 
-from ..core import _ros_client
+from ..core import Core
 from ..errors import SimulatorError
 from .simulator import Simulator
 
@@ -53,7 +53,8 @@ class Gazebo(Simulator):
 
         Currently, there is no way to adjust the view just yet.
         """
-        pass
+        src = "http://localhost:6080/vnc.html?path=vnc&autoconnect=true&resize=scale&reconnect=true&show_dot=true&bell=false&view_only=false"
+        return IFrame(src, "100%", "600px")
 
     def time(self):
         """Return the simulator time."""

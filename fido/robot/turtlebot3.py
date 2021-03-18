@@ -9,7 +9,7 @@ class Turtlebot3(Robot):
     """
 
     def __init__(self, name):
-        super().__init__(name)
+        super().__init__(name, "turtlebot3_burger")
 
     def move(self, distance, duration, speed):
         pass
@@ -22,3 +22,6 @@ class Turtlebot3(Robot):
 
     def ros_urdf(self, path):
         pass
+
+    def robot_description(self):
+        return f"$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/{self.model_name}.urdf.xacro"

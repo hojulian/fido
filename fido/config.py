@@ -1,8 +1,4 @@
-from docker import DockerClient
-from docker.errors import APIError
-
-from .errors import DockerError
-from .core import _docker_client
+from .core import Core
 
 
 def set_docker_host(base_url="tcp://127.0.0.1:1234", version="1.35"):
@@ -18,12 +14,7 @@ def set_docker_host(base_url="tcp://127.0.0.1:1234", version="1.35"):
     Raises:
         fido.errors.DockerError: If the specified Docker server does not exist, or failed to connect.
     """
-
-    global _docker_client
-    try:
-        _docker_client = DockerClient(base_url=base_url, version=version)
-    except APIError:
-        raise DockerError(str(APIError))
+    Core.set_docker_host(base_url, version)
 
 
 def set_logging(node_name, level):
@@ -36,4 +27,4 @@ def set_logging(node_name, level):
         node_name (str): The name of the node.
         level (str): Description of the log's type.
     """
-    pass
+    Core.set_logging(node_name, level)

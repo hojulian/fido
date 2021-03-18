@@ -12,8 +12,9 @@ class Robot(ABC):
     a simulation.
     """
 
-    def __init__(self, name):
-        self._name = name
+    def __init__(self, name, model_name):
+        self.name = name
+        self.model_name = model_name
 
     @abstractmethod
     def move(self, distance, duration, speed):
@@ -63,3 +64,9 @@ class Robot(ABC):
         raise RobotError(
             "failed to call method on abstract robot"
         ) from NotImplementedError("ros_urdf() not implemented")
+
+    @abstractmethod
+    def robot_description(self):
+        raise RobotError(
+            "failed to call method on abstract robot"
+        ) from NotImplementedError("robot_description() not implemented")

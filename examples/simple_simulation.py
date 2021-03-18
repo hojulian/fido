@@ -13,13 +13,12 @@ def main():
         world.add(robot, x=0, y=0, z=0)
 
         sim = Simulation(
-            image="cosi119/fido-simulation:base",
             simulator=Gazebo(gui=True),
             world=world,
         )
         sim.start()
         sim.view()
-        robot.start()
+        # robot.start()
 
     except KeyboardInterrupt as exc:
         robot.stop(forced=True)

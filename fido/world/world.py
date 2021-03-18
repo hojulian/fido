@@ -33,8 +33,8 @@ class World(ABC):
         ) from NotImplementedError("remove() not implemented")
 
     @abstractmethod
-    def gazebo_world(self, path):
-        """Exports a gazebo compatible `.world` representation of the world."""
+    def launch_file(self):
+        """Exports a ROS compatible `.launch` with all included robot in a given world."""
         raise WorldError(
             "failed to call method on abstract world"
-        ) from NotImplementedError("gazebo_world() not implemented")
+        ) from NotImplementedError("launch_file() not implemented")
