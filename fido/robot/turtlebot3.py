@@ -1,4 +1,5 @@
 from .robot import Robot
+from ..ros import InstallFile
 
 
 class Turtlebot3(Robot):
@@ -25,3 +26,8 @@ class Turtlebot3(Robot):
 
     def robot_description(self):
         return f"$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/{self.model_name}.urdf.xacro"
+
+    def fill_dependency(self, installfile: InstallFile):
+        installfile.git(
+            "src/turtlebot3", "https://github.com/ROBOTIS-GIT/turtlebot3.git", "master"
+        )

@@ -33,8 +33,11 @@ class World(ABC):
         ) from NotImplementedError("remove() not implemented")
 
     @abstractmethod
-    def launch_file(self):
-        """Exports a ROS compatible `.launch` with all included robot in a given world."""
+    def export_files(self, path):
+        """Exports all files of the World to the given path.
+
+        Currently, it exports ROS compatible `.rosinstall` and launch file.
+        """
         raise WorldError(
             "failed to call method on abstract world"
-        ) from NotImplementedError("launch_file() not implemented")
+        ) from NotImplementedError("export_files() not implemented")

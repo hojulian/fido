@@ -1,5 +1,5 @@
 from ..robot import Robot
-from ..ros import LaunchFile
+from ..ros import LaunchFile, InstallFile
 from .world import World
 
 
@@ -11,11 +11,18 @@ class RaceTrack(World):
     """
 
     def __init__(self):
-        self._launch_file = LaunchFile()
+        self._install_file = InstallFile()
+        self._launch_file = LaunchFile("racetrack")
         self.__include_this_world()
         super().__init__()
 
     def __include_this_world(self):
+        self._install_file.git(
+            "src/aws-robomaker-racetrack-world",
+            "https://github.com/aws-robotics/aws-robomaker-racetrack-world.git",
+            "master",
+        )
+
         self._launch_file.include(
             "$(find gazebo_ros)/launch/empty_world.launch",
             {
@@ -33,6 +40,8 @@ class RaceTrack(World):
 
         Internally, this is converted into a gazebo_ros spawn_model call.
         """
+        # Add robot dependency to install file
+        robot.fill_dependency(self._install_file)
 
         # Add robot to launch file
         self._launch_file.param(
@@ -52,5 +61,6 @@ class RaceTrack(World):
         """
         pass
 
-    def launch_file(self):
-        return self._launch_file.tostring()
+    def export_files(self, path):
+        self._install_file.to_file(path)
+        self._launch_file.to_file(path)

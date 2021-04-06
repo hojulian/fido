@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from ..errors import RobotError, NotImplementedError
+from ..ros import InstallFile
 
 
 class Robot(ABC):
@@ -67,6 +68,14 @@ class Robot(ABC):
 
     @abstractmethod
     def robot_description(self):
+        """"""
         raise RobotError(
             "failed to call method on abstract robot"
         ) from NotImplementedError("robot_description() not implemented")
+
+    @abstractmethod
+    def fill_dependency(self, installfile: InstallFile):
+        """Fills the needed dependency to the given installfile."""
+        raise RobotError(
+            "failed to call method on abstract robot"
+        ) from NotImplementedError("dependency() not implemented")

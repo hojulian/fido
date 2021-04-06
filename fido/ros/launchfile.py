@@ -2,7 +2,14 @@ import xml.etree.ElementTree as ET
 
 
 class LaunchFile(object):
-    def __init__(self):
+    """Represents a ROS launch file.
+
+    For details about the XML format used by LaunchFile,
+    see http://wiki.ros.org/roslaunch/XML.
+    """
+
+    def __init__(self, name):
+        self._name = name
         self._tree = ET.Element("launch")
 
     def include(self, file, args):
@@ -36,5 +43,9 @@ class LaunchFile(object):
 
         self._tree.append(e)
 
-    def tostring(self):
+    def to_string(self):
         return ET.tostring(self._tree)
+
+    def to_file(self, path):
+        with open(f"{path}/{self._name}.launch", "w") as f:
+            f.write(self.to_string)

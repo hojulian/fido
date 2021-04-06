@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.8"
 docker = "^4.4.4"
 ipython = "^7.21.0"
+PyYAML = "^5.4.1"
 
 [tool.poetry.dev-dependencies]
 pdoc3 = "^0.9.2"
