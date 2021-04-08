@@ -16,6 +16,11 @@ pdoc3 = "^0.9.2"
 black = "^20.8b1"
 pylint = "^2.7.2"
 pytest = "^6.2.2"
+tox = "^3.23.0"
+coverage = "^5.5"
+flake8 = "^3.9.0"
+mccabe = "^0.6.1"
+mypy = "^0.812"
 
 [tool.black]
 line-length = 88
