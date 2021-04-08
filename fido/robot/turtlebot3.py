@@ -25,7 +25,8 @@ class Turtlebot3(Robot):
         pass
 
     def robot_description(self):
-        return f"$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/{self.model_name}.urdf.xacro"
+        urdf_path = f"$(find turtlebot3_description)/urdf/{self.model_name}.urdf.xacro"
+        return f"$(find xacro)/xacro --inorder {urdf_path}"
 
     def fill_dependency(self, installfile: InstallFile):
         installfile.git(

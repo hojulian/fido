@@ -71,7 +71,8 @@ class Core(object):
                 automatically detect the server's version. Default: `1.35`.
 
         Raises:
-            fido.errors.DockerError: If the specified Docker server does not exist, or failed to connect.
+            fido.errors.DockerError: If the specified Docker server does not exist,
+            or failed to connect.
         """
         try:
             cls._docker_client = DockerClient(base_url=base_url, version=version)

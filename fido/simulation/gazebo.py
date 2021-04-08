@@ -1,3 +1,5 @@
+from urllib.parse import urlunparse
+from urllib.parse import urlencode
 from IPython.display import IFrame
 
 from ..core import Core
@@ -53,7 +55,29 @@ class Gazebo(Simulator):
 
         Currently, there is no way to adjust the view just yet.
         """
-        src = "http://localhost:6080/vnc.html?path=vnc&autoconnect=true&resize=scale&reconnect=true&show_dot=true&bell=false&view_only=false"
+        host = "localhost"
+        port = "6080"
+        query = urlencode(
+            {
+                "path": "vnc",
+                "autoconnect": "true",
+                "resize": "scale",
+                "reconnect": "true",
+                "show_dot": "true",
+                "bell": "false",
+                "view_only": "false",
+            }
+        )
+        src = urlunparse(
+            (
+                "http",
+                f"{host}:{port}",
+                "/vnc.html",
+                None,
+                query,
+                None,
+            )
+        )
         return IFrame(src, "100%", "600px")
 
     def time(self):

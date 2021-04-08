@@ -19,18 +19,26 @@ class LaunchFile(object):
 
         self._tree.append(e)
 
-    def node(self, pkg, node_type, name, args):
+    def node(self, pkg, node_type, name, args: dict):
+        args_str = self.__normalize_args(args)
+
         e = ET.Element(
             "node",
             {
                 "pkg": pkg,
                 "type": node_type,
                 "name": name,
-                "args": args,
+                "args": args_str,
             },
         )
-
         self._tree.append(e)
+
+    def __normalize_args(self, args: dict):
+        args_pairs = []
+        for k, v in args.items():
+            args_pairs.append(f"-{k}")
+            args_pairs.append(v)
+        return " ".join(args_pairs)
 
     def param(self, name, command):
         e = ET.Element(

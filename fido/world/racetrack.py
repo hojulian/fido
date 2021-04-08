@@ -17,8 +17,10 @@ class RaceTrack(World):
         super().__init__()
 
     def __include_this_world(self):
+        package_name = "aws-robomaker-racetrack-world"
+
         self._install_file.git(
-            "src/aws-robomaker-racetrack-world",
+            f"src/{package_name}",
             "https://github.com/aws-robotics/aws-robomaker-racetrack-world.git",
             "master",
         )
@@ -26,7 +28,7 @@ class RaceTrack(World):
         self._launch_file.include(
             "$(find gazebo_ros)/launch/empty_world.launch",
             {
-                "world_name": "$(find aws_robomaker_racetrack_world)/world/racetrack_day.world",
+                "world_name": f"$(find {package_name})/world/racetrack_day.world",
                 "paused": "false",
                 "use_sim_time": "true",
                 "gui": "true",
@@ -51,7 +53,14 @@ class RaceTrack(World):
             "gazebo_ros",
             "spawn_model",
             f"spawn_{robot.model_name}",
-            f"-urdf -model {robot.model_name} -x {x} -y {y} -z {z} -param {robot.name}_robot_description",
+            {
+                "urdf": "",
+                "model": robot.model_name,
+                "x": x,
+                "y": y,
+                "z": z,
+                "param": f"{robot.name}_robot_description",
+            },
         )
 
     def remove(self, robot: Robot):

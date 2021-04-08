@@ -12,7 +12,8 @@ def set_docker_host(base_url="tcp://127.0.0.1:1234", version="1.35"):
             automatically detect the server's version. Default: `1.35`.
 
     Raises:
-        fido.errors.DockerError: If the specified Docker server does not exist, or failed to connect.
+        fido.errors.DockerError: If the specified Docker server does not exist,
+        or failed to connect.
     """
     Core.set_docker_host(base_url, version)
 
