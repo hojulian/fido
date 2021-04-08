@@ -33,8 +33,8 @@ class World(ABC):
         ) from NotImplementedError("remove() not implemented")
 
     @abstractmethod
-    def export_files(self, path):
-        """Exports all files of the World to the given path.
+    def export_files(self, path, package):
+        """Export all files of the World to the given path.
 
         Currently, it exports ROS compatible `.rosinstall` and launch file.
         """

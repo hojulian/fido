@@ -37,7 +37,7 @@ class Core(object):
                 hostname="fido-simulation",
                 ports={"80/tcp": port},
                 cap_add=["NET_ADMIN"],
-                volumes={"/fido/fido_ws": volume_path},
+                volumes={"/fido_ws": volume_path},
             )
 
             cls._simulations[sim_id] = port

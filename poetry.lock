@@ -79,6 +79,19 @@ colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
+name = "catkin-pkg"
+version = "0.4.23"
+description = "catkin package library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+docutils = "*"
+pyparsing = "*"
+python-dateutil = "*"
+
+[[package]]
 name = "certifi"
 version = "2020.12.5"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -138,6 +151,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "distro"
+version = "1.5.0"
+description = "Distro - an OS platform information API"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "docker"
 version = "4.4.4"
 description = "A Python library for the Docker Engine API."
@@ -154,6 +175,14 @@ websocket-client = ">=0.32.0"
 [package.extras]
 ssh = ["paramiko (>=2.4.2)"]
 tls = ["pyOpenSSL (>=17.5.0)", "cryptography (>=1.3.4)", "idna (>=2.0.0)"]
+
+[[package]]
+name = "docutils"
+version = "0.17"
+description = "Docutils -- Python Documentation Utilities"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "filelock"
@@ -479,7 +508,7 @@ docs = ["sphinx (==3.5.1)", "python-docs-theme (==2020.12)"]
 name = "pyparsing"
 version = "2.4.7"
 description = "Python parsing module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
@@ -503,6 +532,17 @@ toml = "*"
 
 [package.extras]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
+
+[[package]]
+name = "python-dateutil"
+version = "2.8.1"
+description = "Extensions to the standard Python datetime module"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+
+[package.dependencies]
+six = ">=1.5"
 
 [[package]]
 name = "pywin32"
@@ -545,6 +585,47 @@ urllib3 = ">=1.21.1,<1.27"
 [package.extras]
 security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
+
+[[package]]
+name = "rosdistro"
+version = "0.8.3"
+description = "A tool to work with rosdistro files"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+catkin-pkg = "*"
+PyYAML = "*"
+rospkg = "*"
+
+[[package]]
+name = "rosinstall"
+version = "0.7.8"
+description = "The installer for ROS"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+catkin_pkg = "*"
+pyyaml = "*"
+rosdistro = ">=0.3.0"
+vcstools = ">=0.1.38"
+wstool = ">=0.1.12"
+
+[[package]]
+name = "rospkg"
+version = "1.3.0"
+description = "ROS package library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+catkin-pkg = "*"
+distro = "*"
+PyYAML = "*"
 
 [[package]]
 name = "six"
@@ -628,6 +709,21 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
+name = "vcstools"
+version = "0.1.42"
+description = "VCS/SCM source control library for svn, git, hg, and bzr"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+python-dateutil = "*"
+pyyaml = "*"
+
+[package.extras]
+test = ["nose", "coverage", "coveralls", "mock", "pep8", "tox", "tox-pyenv", "radon (>=1.4.0,<1.5.0)", "coala", "coala-bears", "mypy"]
+
+[[package]]
 name = "virtualenv"
 version = "20.4.3"
 description = "Virtual Python Environment builder"
@@ -672,10 +768,22 @@ category = "dev"
 optional = false
 python-versions = "*"
 
+[[package]]
+name = "wstool"
+version = "0.1.17"
+description = "workspace multi-SCM commands"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pyyaml = "*"
+vcstools = ">=0.1.38"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "cd7610a2243795e7d79916d108c861ce6ffa5d2aa7ae8dd5a8675932e2270fd4"
+content-hash = "9f83f2ce724ace92171c0e63e827e51bbca7a68578a1ef440bfc42de97ded54d"
 
 [metadata.files]
 appdirs = [
@@ -704,6 +812,10 @@ backcall = [
 ]
 black = [
     {file = "black-20.8b1.tar.gz", hash = "sha256:1c02557aa099101b9d21496f8a914e9ed2222ef70336404eeeac8edba836fbea"},
+]
+catkin-pkg = [
+    {file = "catkin_pkg-0.4.23-py3-none-any.whl", hash = "sha256:fbfb107e7e7f3167175b6a68bd51eee7d5a85b2e18c4dbee96d715178f029d8c"},
+    {file = "catkin_pkg-0.4.23.tar.gz", hash = "sha256:28ee181cca827c0aabf9397351f58a97e1475ca5ac7c106a5916e3ee191cd3d0"},
 ]
 certifi = [
     {file = "certifi-2020.12.5-py2.py3-none-any.whl", hash = "sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830"},
@@ -783,9 +895,17 @@ distlib = [
     {file = "distlib-0.3.1-py2.py3-none-any.whl", hash = "sha256:8c09de2c67b3e7deef7184574fc060ab8a793e7adbb183d942c389c8b13c52fb"},
     {file = "distlib-0.3.1.zip", hash = "sha256:edf6116872c863e1aa9d5bb7cb5e05a022c519a4594dc703843343a9ddd9bff1"},
 ]
+distro = [
+    {file = "distro-1.5.0-py2.py3-none-any.whl", hash = "sha256:df74eed763e18d10d0da624258524ae80486432cd17392d9c3d96f5e83cd2799"},
+    {file = "distro-1.5.0.tar.gz", hash = "sha256:0e58756ae38fbd8fc3020d54badb8eae17c5b9dcbed388b17bb55b8a5928df92"},
+]
 docker = [
     {file = "docker-4.4.4-py2.py3-none-any.whl", hash = "sha256:f3607d5695be025fa405a12aca2e5df702a57db63790c73b927eb6a94aac60af"},
     {file = "docker-4.4.4.tar.gz", hash = "sha256:d3393c878f575d3a9ca3b94471a3c89a6d960b35feb92f033c0de36cc9d934db"},
+]
+docutils = [
+    {file = "docutils-0.17-py2.py3-none-any.whl", hash = "sha256:a71042bb7207c03d5647f280427f14bfbd1a65c9eb84f4b341d85fafb6bb4bdf"},
+    {file = "docutils-0.17.tar.gz", hash = "sha256:e2ffeea817964356ba4470efba7c2f42b6b0de0b04e66378507e3e2504bbff4c"},
 ]
 filelock = [
     {file = "filelock-3.0.12-py3-none-any.whl", hash = "sha256:929b7d63ec5b7d6b71b0fa5ac14e030b3f70b75747cef1b10da9b879fef15836"},
@@ -1002,6 +1122,10 @@ pytest = [
     {file = "pytest-6.2.2-py3-none-any.whl", hash = "sha256:b574b57423e818210672e07ca1fa90aaf194a4f63f3ab909a2c67ebb22913839"},
     {file = "pytest-6.2.2.tar.gz", hash = "sha256:9d1edf9e7d0b84d72ea3dbcdfd22b35fb543a5e8f2a60092dd578936bf63d7f9"},
 ]
+python-dateutil = [
+    {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
+    {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
+]
 pywin32 = [
     {file = "pywin32-227-cp27-cp27m-win32.whl", hash = "sha256:371fcc39416d736401f0274dd64c2302728c9e034808e37381b5e1b22be4a6b0"},
     {file = "pywin32-227-cp27-cp27m-win_amd64.whl", hash = "sha256:4cdad3e84191194ea6d0dd1b1b9bdda574ff563177d2adf2b4efec2a244fa116"},
@@ -1094,6 +1218,17 @@ requests = [
     {file = "requests-2.25.1-py2.py3-none-any.whl", hash = "sha256:c210084e36a42ae6b9219e00e48287def368a26d03a048ddad7bfee44f75871e"},
     {file = "requests-2.25.1.tar.gz", hash = "sha256:27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"},
 ]
+rosdistro = [
+    {file = "rosdistro-0.8.3-py3-none-any.whl", hash = "sha256:4d61b3d5a3c0661767ecb947c75fa3fd4be06d7f5788ec7d75d0fb734049c921"},
+    {file = "rosdistro-0.8.3.tar.gz", hash = "sha256:e14893e0408a2e1fb3ecaef0a9fc978a3675519b828c1fff29ba6a78299b37bd"},
+]
+rosinstall = [
+    {file = "rosinstall-0.7.8.tar.gz", hash = "sha256:2ba808bf8bac2cc3f13af9745184b9714c1426e11d09eb96468611b2ad47ed40"},
+]
+rospkg = [
+    {file = "rospkg-1.3.0-py3-none-any.whl", hash = "sha256:dc8fab3ed3f163bc301f94ec65ed39a2c40ded6757615a0fb9f2cb2c82470fbe"},
+    {file = "rospkg-1.3.0.tar.gz", hash = "sha256:e024f9d617c55c76dd47530dceb0882c85cb83234450b8df3d1cb809e009f6cb"},
+]
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
     {file = "six-1.15.0.tar.gz", hash = "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"},
@@ -1151,6 +1286,10 @@ urllib3 = [
     {file = "urllib3-1.26.3-py2.py3-none-any.whl", hash = "sha256:1b465e494e3e0d8939b50680403e3aedaa2bc434b7d5af64dfd3c958d7f5ae80"},
     {file = "urllib3-1.26.3.tar.gz", hash = "sha256:de3eedaad74a2683334e282005cd8d7f22f4d55fa690a2a1020a416cb0a47e73"},
 ]
+vcstools = [
+    {file = "vcstools-0.1.42-py3-none-any.whl", hash = "sha256:451d9efc1d7e0089a4a4488ec4be13b66d820c06e9d656011aa5c94c5b0385f1"},
+    {file = "vcstools-0.1.42.tar.gz", hash = "sha256:9e48d8ed8b0fdda739af56e05bf10da1a509cb7d4950a19c73264c770802777a"},
+]
 virtualenv = [
     {file = "virtualenv-20.4.3-py2.py3-none-any.whl", hash = "sha256:83f95875d382c7abafe06bd2a4cdd1b363e1bb77e02f155ebe8ac082a916b37c"},
     {file = "virtualenv-20.4.3.tar.gz", hash = "sha256:49ec4eb4c224c6f7dd81bb6d0a28a09ecae5894f4e593c89b0db0885f565a107"},
@@ -1165,4 +1304,7 @@ websocket-client = [
 ]
 wrapt = [
     {file = "wrapt-1.12.1.tar.gz", hash = "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"},
+]
+wstool = [
+    {file = "wstool-0.1.17.tar.gz", hash = "sha256:c79b4f110ef17004c24972d742d2c5f606b0f6b424295e7ed029a48e857de237"},
 ]

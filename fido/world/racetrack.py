@@ -1,10 +1,12 @@
+import os
+
 from ..robot import Robot
 from ..ros import LaunchFile, InstallFile
 from .world import World
 
 
 class RaceTrack(World):
-    """Represents a RaceTrack world.
+    """Represent a RaceTrack world.
 
     For details about this world, see:
     https://github.com/aws-robotics/aws-robomaker-racetrack-world.
@@ -70,6 +72,11 @@ class RaceTrack(World):
         """
         pass
 
-    def export_files(self, path):
+    def export_files(self, path, package):
+        """Export files to a given file.
+
+        Internally, .rosinstall file is exported to the root of the directory.
+        The launch file is exported to $PATH/src/$PACKAGE/launch.
+        """
         self._install_file.to_file(path)
-        self._launch_file.to_file(path)
+        self._launch_file.to_file(os.path.join(path, f"/src/{package}/launch"))

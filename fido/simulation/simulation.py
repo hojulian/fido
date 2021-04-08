@@ -6,6 +6,7 @@ from .simulator import Simulator
 from ..core import Core
 from ..world import World
 from ..errors import SimulatorError, SimulationError, DockerError
+from ..ros import prepare_workspace, init_package, gather_dependencies
 
 
 class Simulation(object):
@@ -17,34 +18,27 @@ class Simulation(object):
     Note that both the simulator and world need to be compatible.
     """
 
-    def __init__(self, simulator: Simulator, world: World, image="", use_sim_time=True):
+    def __init__(self, simulator: Simulator, world: World, use_sim_time=True):
         self._simulator = simulator
         self._world = world
         self._use_sim_time = use_sim_time
         self._sim_id = Core.generate_sim_id()
-        self._container = self.__create_container(self._sim_id, image)
+        self._package_path = f"./fido/sim_{self._sim_id}"
+        self._package_name = "simulation"
 
-    def __create_temp_volume(self, world: World):
-        path = f"./fido/sim_{self._sim_id}"
+        # Prepare workspace and simulation package
         try:
-            os.makedirs(f"{path}/src")
-        except OSError as exc:
-            raise exc
+            prepare_workspace(self._package_path)
+            init_package(self._package_name, self._package_path)
+            world.export_files(self._package_path, self._package_name)
+            gather_dependencies(self._package_path)
+        except (OSError) as exc:
+            raise SimulationError("failed to prepare simulation package") from exc
 
-        return path
-
-    def __create_container(self, sim_id, image):
         try:
-            volume = self.__create_temp_volume(self._world)
-
-            if image == "":
-                return Core.create_container(sim_id, volume)
-            return Core.create_container(sim_id, volume, image=image)
-        except (OSError, DockerError) as exc:
-            raise SimulationError("failed to create container") from exc
-
-    def __gather_dependencies(self):
-        pass
+            self._container = Core.create_container(self._sim_id, self._package_path)
+        except (DockerError) as exc:
+            raise SimulationError("failed to create simulation container") from exc
 
     def start(self):
         """Start the simulation.
@@ -124,7 +118,7 @@ class Simulation(object):
             raise SimulationError("failed to view simulation") from exc
 
     def time(self):
-        """Returns the simulation time.
+        """Return the simulation time.
 
         This can be either simulator time or wall time depending on the
         `use_sim_time` flag on creation.
