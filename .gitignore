@@ -131,7 +131,5 @@ dmypy.json
 # Ideaj
 .idea
 
-# VSCode
-.code
-.devcontainer
-.vscode
+# Fido
+.fido
