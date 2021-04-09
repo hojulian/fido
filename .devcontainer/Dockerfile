@@ -21,3 +21,15 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install 'poetry==1.1.5' \
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+
+# Install Docker CLI
+ARG USERNAME=automatic
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+ADD https://raw.githubusercontent.com/microsoft/vscode-dev-containers/master/containers/docker-from-docker/.devcontainer/library-scripts/docker-debian.sh /tmp/library-scripts/
+
+# Use Docker script from script library to set things up
+RUN /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "/var/run/docker-host.sock" "/var/run/docker.sock" "${USERNAME}" "${USE_MOBY}"
+
+ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
+CMD [ "sleep", "infinity" ]

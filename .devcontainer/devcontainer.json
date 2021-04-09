@@ -1,8 +1,11 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.158.0/containers/python-3
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.158.0/containers/docker-from-docker
 {
 	"name": "Python 3 with Docker",
+	"runArgs": ["--init"],
 	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
+	"overrideCommand": false,
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
