@@ -2,11 +2,11 @@ import os
 
 from docker.errors import APIError
 
-from .simulator import Simulator
 from ..core import Core
+from ..errors import DockerError, SimulationError, SimulatorError
+from ..ros import gather_dependencies, init_package, prepare_workspace
 from ..world import World
-from ..errors import SimulatorError, SimulationError, DockerError
-from ..ros import prepare_workspace, init_package, gather_dependencies
+from .simulator import Simulator
 
 
 class Simulation(object):

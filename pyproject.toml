@@ -22,6 +22,7 @@ coverage = "^5.5"
 flake8 = "^3.9.0"
 mccabe = "^0.6.1"
 mypy = "^0.812"
+isort = "^5.8.0"
 
 [tool.black]
 line-length = 88

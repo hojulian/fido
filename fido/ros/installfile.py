@@ -1,3 +1,5 @@
+import os
+
 import yaml
 
 
@@ -30,5 +32,5 @@ class InstallFile(object):
         return yaml.dump(self._dependencies, sort_keys=True)
 
     def to_file(self, path):
-        with open(f"{path}/.rosinstall", "w") as f:
+        with open(os.path.join(path, "/.rosinstall"), "w") as f:
             f.write(self.to_string())

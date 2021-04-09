@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from ..errors import SimulatorError, NotImplementedError
+from ..errors import NotImplementedError, SimulatorError
 
 
 class Simulator(ABC):

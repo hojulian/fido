@@ -1,9 +1,9 @@
 import os
 import sys
 
-from fido.simulation import Simulation, Gazebo
-from fido.world import RaceTrack
 from fido.robot import Turtlebot3
+from fido.simulation import Gazebo, Simulation
+from fido.world import RaceTrack
 
 
 def main():

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from ..errors import RobotError, NotImplementedError
+from ..errors import NotImplementedError, RobotError
 from ..ros import InstallFile
 
 

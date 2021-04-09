@@ -1,5 +1,5 @@
-from urllib.parse import urlunparse
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlunparse
+
 from IPython.display import IFrame
 
 from ..core import Core

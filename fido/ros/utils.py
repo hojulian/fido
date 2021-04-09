@@ -1,7 +1,7 @@
 import os
 
-from rosinstall.rosws_cli import RoswsCLI
 from catkin_pkg.package_templates import PackageTemplate, create_package_files
+from rosinstall.rosws_cli import RoswsCLI
 
 
 def prepare_workspace(path):
