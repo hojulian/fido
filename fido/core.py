@@ -14,7 +14,8 @@ class Core(object):
     _ros_client = None
     _logger = None
 
-    _simulations = {}
+    _used_ids = []
+    _used_ports = []
 
     def __init__(self):
         raise RuntimeError("Core is not initializable")
@@ -26,8 +27,14 @@ class Core(object):
         return cls._docker_client
 
     @classmethod
-    def create_container(cls, sim_id, volume, image="cosi119/fido-simulation:base"):
-        port = cls.__generate_container_port(sim_id)
+    def create_container(
+        cls,
+        sim_id,
+        volume,
+        image="cosi119/fido-simulation:base",
+        vnc_port="",
+        rosbridge_port="",
+    ):
         volume_path = os.path.abspath(volume)
 
         try:
@@ -35,28 +42,38 @@ class Core(object):
                 image,
                 name=f"fido-simulation-{sim_id}",
                 hostname="fido-simulation",
-                ports={"80/tcp": port},
+                ports={
+                    "80/tcp": vnc_port,
+                    "9090/tcp": rosbridge_port,
+                },
                 cap_add=["NET_ADMIN"],
                 volumes={"/fido_ws": volume_path},
             )
 
-            cls._simulations[sim_id] = port
             return c
         except (APIError, NotFound) as exc:
             raise DockerError("failed to create container") from exc
 
     @classmethod
     def generate_sim_id(cls):
-        id = str(uuid4())
-        while id in cls._simulations:
-            id = str(uuid4())
-        return id
+        sim_id = str(uuid4())
+
+        while sim_id in cls._used_ids:
+            sim_id = str(uuid4())
+
+        cls._used_ids.append(sim_id)
+        return sim_id
 
     @classmethod
-    def __generate_container_port(cls, id):
-        port = randint(8000, 8100)
-        while port in cls._simulations.values():
-            port = randint(8000, 8100)
+    def generate_port(cls):
+        max_n = 8100
+        min_n = 8000
+        port = randint(min_n, max_n)
+
+        while port in cls._used_ports:
+            port = randint(min_n, max_n)
+
+        cls._used_ports.append(port)
         return port
 
     @classmethod

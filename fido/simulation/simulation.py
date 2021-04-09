@@ -36,7 +36,14 @@ class Simulation(object):
             raise SimulationError("failed to prepare simulation package") from exc
 
         try:
-            self._container = Core.create_container(self._sim_id, self._package_path)
+            self._vnc_port = Core.generate_port()
+            self._rosbridge_port = Core.generate_port()
+            self._container = Core.create_container(
+                self._sim_id,
+                self._package_path,
+                vnc_port=self._vnc_port,
+                rosbridge_port=self._rosbridge_port,
+            )
         except (DockerError) as exc:
             raise SimulationError("failed to create simulation container") from exc
 
