@@ -1,5 +1,5 @@
-import tempfile
 import os
+import tempfile
 import unittest
 
 from fido.ros.installfile import InstallFile
