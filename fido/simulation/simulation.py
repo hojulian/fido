@@ -38,7 +38,7 @@ class Simulation(object):
         try:
             self._vnc_port = Core.generate_port()
             self._rosbridge_port = Core.generate_port()
-            self._container = Core.create_container(
+            self._container_id = Core.create_container(
                 self._sim_id,
                 self._package_path,
                 vnc_port=self._vnc_port,
@@ -60,15 +60,15 @@ class Simulation(object):
         the ROS master running in the container.
         """
         try:
-            self._container.start(detach=True)
-        except APIError as exc:
-            raise DockerError("failed to start container") from exc
+            # Start container
+            Core.start_container(self._container_id)
 
-        try:
+            # Start rosbridge
             self.__start_rosbridge()
         except DockerError as exc:
             raise DockerError("failed to start rosbridge") from exc
 
+        # Start simulation
         try:
             self._simulator.start()
         except SimulatorError as exc:
@@ -79,10 +79,9 @@ class Simulation(object):
             return f'/bin/bash -c "source /opt/ros/melodic/setup.bash && {cmd}"'
 
         try:
-            exit_code, _ = self._container.exec_run(
+            exit_code, _ = Core.container_exec(
+                self._container_id,
                 with_bash("roslaunch rosbridge_server rosbridge_websocket.launch"),
-                detach=True,
-                workdir="/fido_ws",
             )
             if exit_code != 0:
                 raise Exception(f"exited with a non-zero exit code: {exit_code}")
@@ -90,10 +89,9 @@ class Simulation(object):
             raise DockerError("failed to launch rosbridge_server") from exc
 
         try:
-            exit_code, _ = self._container.exec_run(
+            exit_code, _ = Core.container_exec(
+                self._container_id,
                 with_bash("rosrun tf2_web_republisher tf2_web_republisher"),
-                detach=True,
-                workdir="/fido_ws",
             )
             if exit_code != 0:
                 raise Exception(f"exited with a non-zero exit code: {exit_code}")
@@ -140,7 +138,7 @@ class Simulation(object):
         Once the simulation is destroyed, it can never be started again.
         """
         try:
-            self._container.remove(force=True)
+            Core.remove_container(self._container_id)
         except APIError as exc:
             raise DockerError("failed to destroy container running simulation") from exc
 

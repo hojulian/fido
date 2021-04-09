@@ -37,21 +37,47 @@ class Core(object):
         volume_path = os.path.abspath(volume)
 
         try:
-            c = cls.__docker().containers.create(
-                image,
+            c = cls.__docker().api.create_container(
+                image=image,
                 name=f"fido-simulation-{sim_id}",
                 hostname="fido-simulation",
-                ports={
-                    "80/tcp": vnc_port,
-                    "9090/tcp": rosbridge_port,
-                },
-                cap_add=["NET_ADMIN"],
-                volumes={"/fido_ws": volume_path},
+                detach=True,
+                ports=[(6080, "tcp"), (9090, "tcp")],
+                volumes=["/workspace/fido_ws"],
+                host_config=cls.__docker().api.create_host_config(
+                    auto_remove=True,
+                    port_bindings={
+                        "6080/tcp": vnc_port,
+                        "9090/tcp": rosbridge_port,
+                    },
+                    binds=[f"{volume_path}:/workspace/fido_ws"],
+                ),
             )
-
-            return c
+            return c.get("Id")
         except (APIError, NotFound) as exc:
             raise DockerError("failed to create container") from exc
+
+    @classmethod
+    def start_container(cls, container_id):
+        try:
+            cls.__docker().api.start(container=container_id)
+        except (APIError) as exc:
+            raise DockerError("failed to start container") from exc
+
+    @classmethod
+    def container_exec(cls, container_id, cmd, workdir="/workspace/fido_ws"):
+        try:
+            e = cls.__docker().api.exec_create(container_id, cmd, workdir=workdir)
+            return cls.__docker().api.exec_start(e.get("Id"), detach=True)
+        except (APIError) as exc:
+            raise DockerError("failed to execute command on container") from exc
+
+    @classmethod
+    def remove_container(cls, container_id, force=True):
+        try:
+            cls.__docker().api.remove_container(container_id, force=force)
+        except (APIError) as exc:
+            raise DockerError("failed to remove container") from exc
 
     @classmethod
     def generate_sim_id(cls):
