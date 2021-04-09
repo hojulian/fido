@@ -45,11 +45,11 @@ class RaceTrack(World):
         Internally, this is converted into a gazebo_ros spawn_model call.
         """
         # Add robot dependency to install file
-        robot.fill_dependency(self._install_file)
+        robot.ros_fill_dependency(self._install_file)
 
         # Add robot to launch file
         self._launch_file.param(
-            f"{robot.name}_robot_description", robot.robot_description()
+            f"{robot.name}_robot_description", robot.ros_robot_description()
         )
         self._launch_file.node(
             "gazebo_ros",

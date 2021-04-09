@@ -21,14 +21,11 @@ class Turtlebot3(Robot):
     def stop(self, forced=False):
         pass
 
-    def ros_urdf(self, path):
-        pass
-
-    def robot_description(self):
+    def ros_robot_description(self):
         urdf_path = f"$(find turtlebot3_description)/urdf/{self.model_name}.urdf.xacro"
         return f"$(find xacro)/xacro --inorder {urdf_path}"
 
-    def fill_dependency(self, installfile: InstallFile):
+    def ros_fill_dependency(self, installfile: InstallFile):
         installfile.git(
             "src/turtlebot3", "https://github.com/ROBOTIS-GIT/turtlebot3.git", "master"
         )

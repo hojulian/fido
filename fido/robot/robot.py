@@ -56,26 +56,15 @@ class Robot(ABC):
         ) from NotImplementedError("stop() not implemented")
 
     @abstractmethod
-    def ros_urdf(self, path):
-        """Exports a ROS compatible URDF representation of the robot.
-
-        Internally, this is a wrapper around the internal
-        `fido.robot.Model.ros_urdf()` method.
-        """
-        raise RobotError(
-            "failed to call method on abstract robot"
-        ) from NotImplementedError("ros_urdf() not implemented")
-
-    @abstractmethod
-    def robot_description(self):
+    def ros_robot_description(self):
         """"""
         raise RobotError(
             "failed to call method on abstract robot"
-        ) from NotImplementedError("robot_description() not implemented")
+        ) from NotImplementedError("ros_robot_description() not implemented")
 
     @abstractmethod
-    def fill_dependency(self, installfile: InstallFile):
+    def ros_fill_dependency(self, installfile: InstallFile):
         """Fills the needed dependency to the given installfile."""
         raise RobotError(
             "failed to call method on abstract robot"
-        ) from NotImplementedError("dependency() not implemented")
+        ) from NotImplementedError("ros_fill_dependency() not implemented")
