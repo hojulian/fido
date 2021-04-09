@@ -79,4 +79,4 @@ class RaceTrack(World):
         The launch file is exported to $PATH/src/$PACKAGE/launch.
         """
         self._install_file.to_file(path)
-        self._launch_file.to_file(os.path.join(path, f"/src/{package}/launch"))
+        self._launch_file.to_file(os.path.join(path, "src", package, "launch"))

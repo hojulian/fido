@@ -16,7 +16,7 @@ def init_package(path, package):
     author = "Fido authors"
     version = "0.0.1"
     distro = "melodic"
-    target_path = os.path.join(path, f"/src/{package}")
+    target_path = os.path.join(path, "src", package)
 
     package_template = PackageTemplate._create_package_template(
         package_name=package_name,
@@ -32,9 +32,9 @@ def init_package(path, package):
 
     create_package_files(target_path, package_template, distro, newfiles={})
 
-    os.makedirs(os.path.join(path, f"/src/{package}"))
-    os.makedirs(os.path.join(path, f"/src/{package}/launch"))
-    os.makedirs(os.path.join(path, f"/src/{package}/scripts"))
+    os.makedirs(os.path.join(path, "src", package))
+    os.makedirs(os.path.join(path, "src", package, "launch"))
+    os.makedirs(os.path.join(path, "src", package, "scripts"))
 
 
 def gather_dependencies(path):

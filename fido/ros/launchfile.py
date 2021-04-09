@@ -1,3 +1,4 @@
+import os
 import xml.etree.ElementTree as ET
 
 
@@ -52,8 +53,8 @@ class LaunchFile(object):
         self._tree.append(e)
 
     def to_string(self):
-        return ET.tostring(self._tree)
+        return ET.tostring(self._tree).decode("utf-8")
 
     def to_file(self, path):
-        with open(f"{path}/{self._name}.launch", "w") as f:
-            f.write(self.to_string)
+        with open(os.path.join(path, f"{self._name}.launch"), "w") as f:
+            f.write(self.to_string())

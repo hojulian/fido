@@ -29,8 +29,8 @@ class InstallFile(object):
         )
 
     def to_string(self):
-        return yaml.dump(self._dependencies, sort_keys=True)
+        return yaml.dump(self._dependencies, sort_keys=True, default_flow_style=False)
 
     def to_file(self, path):
-        with open(os.path.join(path, "/.rosinstall"), "w") as f:
-            f.write(self.to_string())
+        with open(os.path.join(path, ".rosinstall"), "w") as f:
+            yaml.dump(self._dependencies, f, sort_keys=True, default_flow_style=False)
