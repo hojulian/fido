@@ -8,5 +8,8 @@
     "python.testing.pytestPath": ".venv/bin/pytest",
     "python.sortImports.path": ".venv/bin/isort",
     "python.pythonPath": ".venv/bin/python",
-    "editor.rulers": [88],
+    "editor.rulers": [
+        88
+    ],
+    "jupyter.jupyterServerType": "local",
 }
