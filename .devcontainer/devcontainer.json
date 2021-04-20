@@ -3,7 +3,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.158.0/containers/docker-from-docker
 {
 	"name": "Python 3 with Docker",
-	"runArgs": ["--init"],
+	"runArgs": ["--init", "--network=host"],
 	"mounts": [ "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind" ],
 	"overrideCommand": false,
 	"build": {
