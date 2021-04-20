@@ -6,7 +6,7 @@ from rosinstall.rosws_cli import RoswsCLI
 
 def prepare_workspace(path):
     cli = RoswsCLI()
-    cli.cmd_init(path)
+    cli.cmd_init([path])
 
 
 def init_package(path, package):

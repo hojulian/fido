@@ -71,7 +71,8 @@ class LaunchFile(object):
         args_pairs = []
         for k, v in args.items():
             args_pairs.append(f"-{k}")
-            args_pairs.append(v)
+            if str(v) != "":
+                args_pairs.append(str(v))
         return " ".join(args_pairs)
 
     def param(self, name, command):
