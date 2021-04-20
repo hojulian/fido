@@ -33,8 +33,7 @@ def init_package(path, package):
     if not os.path.exists(target_path):
         os.makedirs(target_path)
 
-    create_package_files(
-        os.path.abspath(target_path), package_template, distro)
+    create_package_files(os.path.abspath(target_path), package_template, distro)
 
     os.makedirs(os.path.join(path, "src", package, "launch"))
     os.makedirs(os.path.join(path, "src", package, "scripts"))
