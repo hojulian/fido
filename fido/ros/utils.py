@@ -22,21 +22,24 @@ def init_package(path, package):
         package_name=package_name,
         description=description,
         licenses=[],
-        maintainer_names=maintainer,
-        author_names=author,
+        maintainer_names=[maintainer],
+        author_names=[author],
         version=version,
         catkin_deps=None,
         system_deps=None,
         boost_comps=None,
     )
 
-    create_package_files(target_path, package_template, distro, newfiles={})
+    if not os.path.exists(target_path):
+        os.makedirs(target_path)
 
-    os.makedirs(os.path.join(path, "src", package))
+    create_package_files(
+        os.path.abspath(target_path), package_template, distro)
+
     os.makedirs(os.path.join(path, "src", package, "launch"))
     os.makedirs(os.path.join(path, "src", package, "scripts"))
 
 
 def gather_dependencies(path):
     cli = RoswsCLI()
-    cli.cmd_update(path)
+    cli.cmd_update(path, ["-t", path])
