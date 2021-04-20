@@ -1,4 +1,8 @@
+from roslibpy import Topic
+
+from ..dtypes import Twist
 from ..ros import InstallFile
+from .component import Lidar, Odomer
 from .robot import Robot
 
 
@@ -9,8 +13,12 @@ class Turtlebot3(Robot):
     https://emanual.robotis.com/docs/en/platform/turtlebot3/overview/.
     """
 
+    _max_speed: float
+    _min_speed: float
+
     def __init__(self, name):
-        super().__init__(name, "turtlebot3_burger")
+        sensors = [Lidar(), Odomer()]
+        super(Turtlebot3, self).__init__(name, "turtlebot3_burger", sensors=sensors)
 
     def move(self, distance, duration, speed):
         pass
@@ -27,5 +35,17 @@ class Turtlebot3(Robot):
 
     def ros_fill_dependency(self, installfile: InstallFile):
         installfile.git(
-            "src/turtlebot3", "https://github.com/ROBOTIS-GIT/turtlebot3.git", "master"
+            "src/turtlebot3",
+            "https://github.com/ROBOTIS-GIT/turtlebot3.git",
+            "master",
+        )
+        installfile.git(
+            "src/turtlebot3_simulations",
+            "https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git",
+            "master",
+        )
+        installfile.git(
+            "src/turtlebot3_msgs",
+            "https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git",
+            "master",
         )

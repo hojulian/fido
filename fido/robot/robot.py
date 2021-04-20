@@ -13,9 +13,27 @@ class Robot(ABC):
     a simulation.
     """
 
-    def __init__(self, name, model_name):
+    def __init__(self, name, model_name, sensors):
         self.name = name
         self.model_name = model_name
+        self._sensors = sensors
+        self._closers = []
+
+    def prepare(self):
+        self.__init_sensors()
+
+    def __init_sensors(self):
+        for s in self._sensors:
+            c = s.handle_updates(self, self._ros)
+            self._closers.append(c)
+
+    def set_world(self, world):
+        """Set the world to use for this robot."""
+        self._world = world
+
+    @property
+    def _ros(self):
+        return self._world.ros()
 
     @abstractmethod
     def move(self, distance, duration, speed):

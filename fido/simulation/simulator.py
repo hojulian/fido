@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 from ..errors import NotImplementedError, SimulatorError
 
-
 class Simulator(ABC):
     """Represents a simulator.
 
@@ -14,6 +13,9 @@ class Simulator(ABC):
 
     def __init__(self, gui=True):
         self._gui = gui
+
+    def set_simulation(self, simulation):
+        self._simulation = simulation
 
     @abstractmethod
     def start(self):
