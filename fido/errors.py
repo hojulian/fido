@@ -83,3 +83,10 @@ class NotImplementedError(Error):
 
     def __init__(self, msg):
         super(NotImplementedError, self).__init__(msg)
+
+
+class DTypeError(Error):
+    """Represents an error for dType."""
+
+    def __init__(self, msg):
+        super(DTypeError, self).__init__(msg)
