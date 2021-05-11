@@ -17,8 +17,9 @@ def main():
             world=world,
         )
         sim.start()
-        sim.view()
-        # robot.start()
+
+        robot.move(speed=2.0, duration=5.0)
+        robot.stop()
 
     except KeyboardInterrupt as exc:
         robot.stop(forced=True)

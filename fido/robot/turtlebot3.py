@@ -22,10 +22,10 @@ class Turtlebot3(Robot, RobotProtocol):
         self.add_sensor(Lidar)
         self.add_sensor(Odomer)
 
-    def move(self, distance: float, duration: float, speed: float) -> None:
+    def move(self, distance: float = 0, duration: float = 0, speed: float = 0) -> None:
         return super().move(distance=distance, duration=duration, speed=speed)
 
-    def rotate(self, angle: float, duration: float, speed: float) -> None:
+    def rotate(self, angle: float = 0, duration: float = 0, speed: float = 0) -> None:
         return super().rotate(angle, duration, speed)
 
     def stop(self, forced=False):
