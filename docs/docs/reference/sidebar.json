@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "items": [
+        "reference/fido/dtypes/dtypes"
+      ],
+      "label": "fido.dtypes",
+      "type": "category"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            "reference/fido/robot/component/sensor"
+          ],
+          "label": "fido.robot.component",
+          "type": "category"
+        },
+        "reference/fido/robot/robot",
+        "reference/fido/robot/turtlebot3"
+      ],
+      "label": "fido.robot",
+      "type": "category"
+    },
+    {
+      "items": [
+        "reference/fido/ros/installfile",
+        "reference/fido/ros/launchfile",
+        "reference/fido/ros/protocol",
+        "reference/fido/ros/utils"
+      ],
+      "label": "fido.ros",
+      "type": "category"
+    },
+    {
+      "items": [
+        "reference/fido/simulation/gazebo",
+        "reference/fido/simulation/simulation",
+        "reference/fido/simulation/simulator"
+      ],
+      "label": "fido.simulation",
+      "type": "category"
+    },
+    {
+      "items": [
+        "reference/fido/world/racetrack",
+        "reference/fido/world/world"
+      ],
+      "label": "fido.world",
+      "type": "category"
+    },
+    "reference/fido/config",
+    "reference/fido/core",
+    "reference/fido/errors",
+    "reference/fido/time"
+  ],
+  "label": "API Reference",
+  "type": "category"
+}

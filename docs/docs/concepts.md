@@ -1,0 +1,81 @@
+# Concepts
+
+## Simulation
+
+A simulation represents a simulated environment. A [World](#world), [Robot](#robot), and [Simulator](#simulator) jointly forms a Simulation.
+
+To create a simulation, simply:
+
+```python
+sim = Simulation(simulator=..., world=...)
+```
+
+Architecturally, a simulation is self-contained as a docker container. By default, a simulation uses the Fido base image. *Note: it is possible to use a different docker image, see [Custom Docker Image](./advanced#custom-docker-image).* Each simulation has an unique docker container.
+
+Internally, when a simulation is created, it will first initialize by loading all the external world and robot files using `rosinstall`. The loaded files are located under `.fido/sim-$SIM_ID` folder. After that, it will create a docker container with the files attached to its catkin workspace. The container created will be in a pause state.
+
+When the container is started, it creates a `rosbridge` and a `novnc` GUI on two randomized ports. The simulation will then attempt to connect to the container using its ROS client. Once it is connected successfully, it will then start up all the sensors of each robots by subscribing to the corresponding topics. This allows the robots to have the latest state updates. The simulation is controlled using simulator's [API](./reference/fido/simulation/simulator).
+
+At this stage, the simulation will continue to run in the background until `stop()` or `destroy()` is called. When `destroy()` is called, the simulation is forcefully stopped and destroyed alongside with its underlying docker container. A destroyed simulation cannot be started again.
+
+## Simulator
+
+A simulator acts as the physics engine for running a simulation. This provides API for the simulation to control the lifecycle of a simulator (e.g. starting & stopping). Fido does not make any enforcement on the compatibility of simulator, world, and robot, it is up to the user to check their compatibility.
+
+The basic operations of simulator are as follows,
+
+- Start/Stop
+- Reset
+- View
+- Show time
+
+It is up to the implementation to decide what each of these operation means.
+
+### Gazebo
+
+[Gazebo](http://gazebosim.org/) is a simulator specifically designed for robot simulation.
+
+Currently, this is the only supported simulator.
+
+## World
+
+A world represents a collection of robots and objects. The common world operations are adding and removing robots.
+
+Internally, the world is defined as a set of files: A `.rosinstall` file for importing external world models, and a `.launch` file for starting the world. The `export_files()` function exports all the files needed to represent the world and all the included robots.
+
+## Robot
+
+A robot represents either a physical or a simulated robot.
+
+To control a physical robot, first, start a [rosbridge server](http://wiki.ros.org/rosbridge_server) on the robot, and expose a port for connection. Then, in python simply do,
+
+```python
+robot = Turtlebot3("example-bot", physical=True)
+robot.connect(host="127.0.0.1", port=9090) # Robot's IP address and rosbridge port
+```
+
+To control a simulated robot, a simulated world is needed,
+
+```python
+world = RaceTrack()
+robot = Turtlebot3("example-bot", physical=False)
+world.add(robot) # Add simulated robot to world
+```
+
+### Sensor
+
+A sensor represents a sensor on the robot.
+
+Internally, a sensor listens to a specific ROS topic and updates the robot's internal state. For instance, a `Odomer` listens to the `/odom` topic and update the robot's `x`, `y`, `z` coordinates. A sensor only starts listening to updates once the simulation has started. It will stop updating once the simulation is destroyed.
+
+## Docker
+
+Fido leverages Docker for simulation. This allows each simulation to be isolated and platform independent.
+
+To change the Docker host,
+
+```python
+from fido import config
+
+config.set_docker_host(base_url=..., version=...)
+```

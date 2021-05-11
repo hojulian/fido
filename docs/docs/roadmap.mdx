@@ -1,0 +1,24 @@
+# Roadmap
+
+## 1.0 Must haves
+
+- Support for non-ROS environments
+  - Fido currently assumes ROS to be the de facto environment
+  - Better Abstraction of environments, currently Fido uses Protocol for distinguishing environments
+- Clarify simulation versus real-life robot control
+- Support addition and removal of robot during simulation time
+  - Implement as simulator functionality
+
+## Planned features
+
+- Support for multiple concurrent simulations
+- Server side Fido
+- Better logging or structured logging
+- Automatically generate Fido DTypes from ROS messages (similar to `genpy`)
+
+## Other QoL improvements
+
+- Custom catkin workspace
+  - Currently all catkin workspace is created at runtime, we want 1) reusing existing workspaces, and 2) using user-provided workspace.
+- CUDA support in base image
+- Custom Gazebo GUI for `Gazebo.view()`
