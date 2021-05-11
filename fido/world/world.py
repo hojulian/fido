@@ -1,13 +1,15 @@
 import os
-from abc import ABC, abstractmethod
+from abc import ABC
+from typing import List
 
 from roslibpy import Ros
 
 from ..errors import NotImplementedError, WorldError
-from ..ros import InstallFile, LaunchFile
+from ..robot import Robot
+from ..ros import InstallFile, LaunchFile, WorldProtocol
 
 
-class World(ABC):
+class World(ABC, WorldProtocol):
     """Represents a world.
 
     Currently this is only compatible with Gazebo.
@@ -15,16 +17,15 @@ class World(ABC):
 
     _install_file: InstallFile
     _launch_file: LaunchFile
-
-    _robots: list
+    _robots: List[Robot]
 
     def __init__(self):
         self._install_file = InstallFile()
         self._launch_file = LaunchFile("simulation")
         self._robots = []
-        self.__include_ros_bridge()
+        self._included_rosbridge = False
 
-    def add(self, robot, x, y, z):
+    def add(self, robot: Robot, x=0, y=0, z=0) -> None:
         """Add a robot to the world.
 
         Internally, this is converted into a gazebo_ros spawn_model
@@ -59,11 +60,11 @@ class World(ABC):
         self._robots.append(robot)
         robot.set_world(self)
 
-    def __include_ros_bridge(self):
+    def __include_ros_bridge(self, rosbridge_port=9090):
         self._launch_file.include(
             "$(find rosbridge_server)/launch/rosbridge_websocket.launch",
             {
-                "port": "9090",
+                "port": f"{rosbridge_port}",
             },
         )
         self._launch_file.node(
@@ -72,17 +73,16 @@ class World(ABC):
             "tf2_web_republisher",
         )
 
-    def prepare_robots(self):
-        """Prepare robots add ros client to each of the robots are initialize the
-        internal sensors.
-        """
+    def prepare_robots(self) -> None:
+        """Prepare prepares all the robots in the world."""
         for r in self._robots:
             r.prepare()
 
-    def set_simulation(self, simulation):
+    def set_simulation(self, simulation) -> None:
+        """Set the parent simulation."""
         self._simulation = simulation
 
-    def remove(self, robot):
+    def remove(self, robot: Robot) -> None:
         """Remove a robot from the world.
 
         Internally, this is converted into a gazebo_ros delete_model
@@ -92,18 +92,23 @@ class World(ABC):
             "failed to call method on abstract world"
         ) from NotImplementedError("remove() not implemented")
 
-    def robots(self):
+    def robots(self) -> List[Robot]:
         """Returns a list of robots."""
         return self._robots
 
-    def ros(self):
+    def ros(self) -> Ros:
+        """Return internal ROS client."""
         return self._simulation.ros()
 
-    def export_files(self, path, package):
+    def export_files(self, path, package, rosbridge_port) -> None:
         """Export files to a given file.
 
         Internally, .rosinstall file is exported to the root of the directory.
         The launch file is exported to $PATH/src/$PACKAGE/launch.
         """
+        if not self._included_rosbridge:
+            self.__include_ros_bridge(rosbridge_port)
+            self._included_rosbridge = True
+
         self._install_file.to_file(path)
         self._launch_file.to_file(os.path.join(path, "src", package, "launch"))

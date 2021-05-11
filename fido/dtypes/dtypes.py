@@ -1,12 +1,10 @@
 import json
 import math
 from dataclasses import dataclass
-from typing import Protocol, List
+from typing import List, Protocol
 
 import numpy as np
 from roslibpy import Message
-
-from ..errors import DTypeError, NotImplementedError
 
 
 class DType(Protocol):
@@ -17,6 +15,9 @@ class DType(Protocol):
 
     def ros_msg(self) -> Message:
         return Message({})
+
+    def ros_type(self):
+        return "std_msgs/Empty"
 
     def str(self) -> str:
         return json.dumps(self.ros_msg().data)
@@ -107,6 +108,9 @@ class Odom(DType):
         }
         return Message(msg)
 
+    def ros_type(self):
+        return "nav_msgs/Odometry"
+
 
 @dataclass(repr=True)
 class Twist(DType):
@@ -137,6 +141,9 @@ class Twist(DType):
         }
         return Message(msg)
 
+    def ros_type(self):
+        return "geometry_msgs/Twist"
+
 
 @dataclass(frozen=True, repr=True)
 class LaserScan(DType):
@@ -147,8 +154,8 @@ class LaserScan(DType):
 
     range_min: float
     range_max: float
-    ranges: List
-    intensities: List
+    ranges: List[float]
+    intensities: List[float]
 
     def ros_msg(self):
         msg = {
@@ -158,6 +165,9 @@ class LaserScan(DType):
             "intensities": self.intensities,
         }
         return Message(msg)
+
+    def ros_type(self):
+        return "sensor_msgs/LaserScan"
 
 
 @dataclass(frozen=True, repr=True)
@@ -178,3 +188,6 @@ class Image(DType):
             "data": self.data,
         }
         return Message(msg)
+
+    def ros_type(self):
+        return "sensor_msgs/Image"

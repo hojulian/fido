@@ -1,8 +1,17 @@
+import time
+import typing
 from abc import ABC, abstractmethod
 
-from ..errors import NotImplementedError, SimulatorError
+from IPython.display import IFrame
 
-class Simulator(ABC):
+from ..errors import NotImplementedError, SimulatorError
+from ..ros import SimulatorProtocol
+
+if typing.TYPE_CHECKING:
+    from .simulation import Simulation
+
+
+class Simulator(ABC, SimulatorProtocol):
     """Represents a simulator.
 
     A simulator provides a ROS compatible physics engine for running a
@@ -11,14 +20,18 @@ class Simulator(ABC):
     Currently, there is only one supported simulator implementation: Gazebo.
     """
 
+    _simulation: "Simulation"
+
     def __init__(self, gui=True):
         self._gui = gui
+        self._time = time.time()
 
-    def set_simulation(self, simulation):
+    def set_simulation(self, simulation) -> None:
+        """Set the parent simulation."""
         self._simulation = simulation
 
     @abstractmethod
-    def start(self):
+    def start(self) -> None:
         """Start the simulator.
 
         This starts the clock of the simulator.
@@ -28,7 +41,7 @@ class Simulator(ABC):
         ) from NotImplementedError("start() not implemented")
 
     @abstractmethod
-    def stop(self):
+    def stop(self) -> None:
         """Pause the simulator.
 
         This will stop the simulation time as well.
@@ -38,7 +51,7 @@ class Simulator(ABC):
         ) from NotImplementedError("stop() not implemented")
 
     @abstractmethod
-    def reset(self):
+    def reset(self) -> None:
         """Reset the simulator.
 
         This will cause the simulator to reset itself to its original state.
@@ -53,18 +66,7 @@ class Simulator(ABC):
         ) from NotImplementedError("reset() not implemented")
 
     @abstractmethod
-    def shutdown(self):
-        """Exit the simulator.
-
-        This will cause the simulator to exit. An error will be raised if the
-        simulator exited with a non-zero exit code.
-        """
-        raise SimulatorError(
-            "failed to call method on abstract simulator"
-        ) from NotImplementedError("shutdown() not implemented")
-
-    @abstractmethod
-    def view(self):
+    def view(self) -> IFrame:
         """Visualize the simulator view.
 
         This will display the view in a `IPython.core.display.display`. This is
@@ -77,7 +79,7 @@ class Simulator(ABC):
         ) from NotImplementedError("view() not implemented")
 
     @abstractmethod
-    def time(self):
+    def time(self) -> float:
         """Return the simulator time."""
         raise SimulatorError(
             "failed to call method on abstract simulator"

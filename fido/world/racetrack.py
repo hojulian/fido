@@ -1,6 +1,3 @@
-import os
-
-from ..ros import InstallFile, LaunchFile
 from .world import World
 
 
@@ -48,10 +45,10 @@ class RaceTrack(World):
         """
         super().remove(robot)
 
-    def export_files(self, path, package):
+    def export_files(self, path, package, rosbridge_port):
         """Export files to a given file.
 
         Internally, .rosinstall file is exported to the root of the directory.
         The launch file is exported to $PATH/src/$PACKAGE/launch.
         """
-        super().export_files(path, package)
+        super().export_files(path, package, rosbridge_port)

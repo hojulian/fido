@@ -1,7 +1,12 @@
+import typing
 from abc import ABC, abstractmethod
+from typing import Any, Callable, List, Mapping, Type
 
 from ..errors import NotImplementedError, RobotError
-from ..ros import InstallFile
+
+if typing.TYPE_CHECKING:
+    from ..world import World
+    from .component import Sensor
 
 
 class Robot(ABC):
@@ -13,30 +18,34 @@ class Robot(ABC):
     a simulation.
     """
 
-    def __init__(self, name, model_name, sensors):
+    _sensors: List["Sensor"] = []
+    _closers: List[Callable[[], None]] = []
+
+    def __init__(self, name: str, model_name: str):
         self.name = name
         self.model_name = model_name
-        self._sensors = sensors
-        self._closers = []
 
-    def prepare(self):
+    def add_sensor(
+        self, sensor_cls: Type["Sensor"], sensor_args: Mapping[str, Any] = {}
+    ) -> None:
+        """Add sensor to the robot."""
+        self._sensors.append(sensor_cls(self, **sensor_args))
+
+    def prepare(self) -> None:
+        """Prepare initializes all the sensors in the robot."""
         self.__init_sensors()
 
     def __init_sensors(self):
         for s in self._sensors:
-            c = s.handle_updates(self, self._ros)
+            c = s.handle_updates(self.world.ros())
             self._closers.append(c)
 
-    def set_world(self, world):
+    def set_world(self, world: "World") -> None:
         """Set the world to use for this robot."""
-        self._world = world
-
-    @property
-    def _ros(self):
-        return self._world.ros()
+        self.world = world
 
     @abstractmethod
-    def move(self, distance, duration, speed):
+    def move(self, distance: float = 0, duration: float = 0, speed: float = 0) -> None:
         """Move the robot at a certain distance at a certain speed or for a
         certain duration.
 
@@ -49,7 +58,7 @@ class Robot(ABC):
         ) from NotImplementedError("move() not implemented")
 
     @abstractmethod
-    def rotate(self, angle, duration, speed):
+    def rotate(self, angle: float = 0, duration: float = 0, speed: float = 0) -> None:
         """Rotate the robot at a certain angle at a certain speed or for a
         certain duration.
 
@@ -63,7 +72,7 @@ class Robot(ABC):
         ) from NotImplementedError("rotate() not implemented")
 
     @abstractmethod
-    def stop(self, forced=False):
+    def stop(self, forced: bool = False) -> None:
         """Stop the robot.
 
         This is a blocking call. It will block execution until the robot
@@ -72,17 +81,3 @@ class Robot(ABC):
         raise RobotError(
             "failed to call method on abstract robot"
         ) from NotImplementedError("stop() not implemented")
-
-    @abstractmethod
-    def ros_robot_description(self):
-        """"""
-        raise RobotError(
-            "failed to call method on abstract robot"
-        ) from NotImplementedError("ros_robot_description() not implemented")
-
-    @abstractmethod
-    def ros_fill_dependency(self, installfile: InstallFile):
-        """Fills the needed dependency to the given installfile."""
-        raise RobotError(
-            "failed to call method on abstract robot"
-        ) from NotImplementedError("ros_fill_dependency() not implemented")

@@ -10,7 +10,6 @@ from .errors import DockerError
 
 class Core(object):
     _docker_client = None
-    _ros_client = None
     _logger = None
 
     _used_ids = []
@@ -42,13 +41,13 @@ class Core(object):
                 name=f"fido-simulation-{sim_id}",
                 hostname="fido-simulation",
                 detach=True,
-                ports=[(6080, "tcp"), (9090, "tcp")],
+                ports=[(6080, "tcp"), (int(rosbridge_port), "tcp")],
                 volumes=["/workspace/fido_ws"],
                 host_config=cls.__docker().api.create_host_config(
                     auto_remove=True,
                     port_bindings={
                         "6080/tcp": vnc_port,
-                        "9090/tcp": rosbridge_port,
+                        f"{rosbridge_port}/tcp": rosbridge_port,
                     },
                     binds=[f"{volume_path}:/workspace/fido_ws"],
                 ),
@@ -65,11 +64,16 @@ class Core(object):
             raise DockerError("failed to start container") from exc
 
     @classmethod
-    def container_exec(cls, container_id, cmd, workdir="/workspace/fido_ws"):
+    def container_exec(
+        cls, container_id, cmd, workdir="/workspace/fido_ws", env={}, stream=False
+    ):
         try:
-            e = cls.__docker().api.exec_create(container_id, cmd, workdir=workdir)
-            return cls.__docker().api.exec_start(e.get("Id"), detach=True)
-        except (APIError) as exc:
+            c = cls.__docker().containers.get(container_id)
+            print(f"executing {cmd}")
+            return c.exec_run(
+                cmd, workdir=workdir, stream=stream, socket=False, environment=env
+            )
+        except (APIError, NotFound) as exc:
             raise DockerError("failed to execute command on container") from exc
 
     @classmethod
@@ -102,13 +106,13 @@ class Core(object):
         return port
 
     @classmethod
-    def set_docker_host(cls, base_url="tcp://127.0.0.1:1234", version="1.35"):
+    def set_docker_host(cls, base_url="unix:///var/run/docker.sock", version="1.35"):
         """Set the Docker client connection details.
 
         Args:
             base_url (str): URL to Docker server. For example,
                 `unix:///var/run/docker.sock` or `tcp://127.0.0.1:1234`. Default:
-                `tcp://127.0.0.1:1234`.
+                `unix:///var/run/docker.sock`.
             version (str): The version of the API to use. Set to `auto` to
                 automatically detect the server's version. Default: `1.35`.
 
@@ -118,8 +122,8 @@ class Core(object):
         """
         try:
             cls._docker_client = DockerClient(base_url=base_url, version=version)
-        except APIError:
-            raise DockerError(str(APIError))
+        except APIError as exc:
+            raise DockerError("unable set docker host") from exc
 
     @classmethod
     def set_logging(cls, node_name, level):

@@ -1,25 +1,30 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from typing import Callable
 
 from roslibpy import Ros, Topic
 
 from ...errors import NotImplementedError, RobotError
-from ..robot import Robot
+from ...ros import RobotProtocol
 
 
-class Sensor(ABC):
+class Sensor(object):
+    robot: RobotProtocol
+
+    def __init__(self, robot: RobotProtocol, **kwargs):
+        self.robot = robot
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
     @abstractmethod
-    def handle_updates(self, robot: Robot, ros: Ros):
+    def handle_updates(self, ros: Ros) -> Callable[[], None]:
         raise RobotError(
             "failed to call method on abstract sensor"
         ) from NotImplementedError("handle_updates() not implemented")
 
 
 class Odomer(Sensor):
-    def handle_updates(self, robot: Robot, ros: Ros):
-        self._robot = robot
-        self._ros = ros
-
-        topic = Topic(self._ros, "/odom", "nav_msgs/Odometry")
+    def handle_updates(self, ros):
+        topic = Topic(ros, "/odom", "nav_msgs/Odometry")
         topic.subscribe(self.__odom_handler)
 
         return lambda: topic.unsubscribe()
@@ -29,17 +34,14 @@ class Odomer(Sensor):
         y = msg["pose"]["pose"]["position"]["y"]
         z = msg["pose"]["pose"]["position"]["z"]
 
-        setattr(self._robot, "x", x)
-        setattr(self._robot, "y", y)
-        setattr(self._robot, "z", z)
+        setattr(self.robot, "x", x)
+        setattr(self.robot, "y", y)
+        setattr(self.robot, "z", z)
 
 
 class Lidar(Sensor):
-    def handle_updates(self, robot: Robot, ros: Ros):
-        self._robot = robot
-        self._ros = ros
-
-        topic = Topic(self._ros, "/scan", "sensor_msgs/LaserScan")
+    def handle_updates(self, ros):
+        topic = Topic(ros, "/scan", "sensor_msgs/LaserScan")
         topic.subscribe(self.__scan_handler)
 
         return lambda: topic.unsubscribe()
@@ -47,4 +49,4 @@ class Lidar(Sensor):
     def __scan_handler(self, msg):
         ranges = msg["ranges"]
 
-        setattr(self._robot, "ranges", ranges)
+        setattr(self.robot, "ranges", ranges)

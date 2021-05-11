@@ -1,12 +1,12 @@
 from roslibpy import Topic
 
 from ..dtypes import Twist
-from ..ros import InstallFile
+from ..ros import InstallFile, RobotProtocol
 from .component import Lidar, Odomer
 from .robot import Robot
 
 
-class Turtlebot3(Robot):
+class Turtlebot3(Robot, RobotProtocol):
     """Represents a Turtlebot3 Burger robot.
 
     For details about this robot, see:
@@ -17,17 +17,24 @@ class Turtlebot3(Robot):
     _min_speed: float
 
     def __init__(self, name):
-        sensors = [Lidar(), Odomer()]
-        super(Turtlebot3, self).__init__(name, "turtlebot3_burger", sensors=sensors)
+        super(Turtlebot3, self).__init__(name, "turtlebot3_burger")
 
-    def move(self, distance, duration, speed):
-        pass
+        self.add_sensor(Lidar)
+        self.add_sensor(Odomer)
 
-    def rotate(self, angle, duration, speed):
-        pass
+    def move(self, distance: float, duration: float, speed: float) -> None:
+        return super().move(distance=distance, duration=duration, speed=speed)
+
+    def rotate(self, angle: float, duration: float, speed: float) -> None:
+        return super().rotate(angle, duration, speed)
 
     def stop(self, forced=False):
-        pass
+        msg = Twist()
+        t = Topic(self.ros(), "/cmd_vel", msg.ros_type())
+        t.publish(msg)
+
+    def ros(self):
+        return self.world.ros()
 
     def ros_robot_description(self):
         urdf_path = f"$(find turtlebot3_description)/urdf/{self.model_name}.urdf.xacro"

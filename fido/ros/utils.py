@@ -1,4 +1,5 @@
 import os
+import re
 
 from catkin_pkg.package_templates import PackageTemplate, create_package_files
 from rosinstall.rosws_cli import RoswsCLI
@@ -7,6 +8,16 @@ from rosinstall.rosws_cli import RoswsCLI
 def prepare_workspace(path):
     cli = RoswsCLI()
     cli.cmd_init([path])
+
+    # Fix setup.sh path
+    with open(os.path.join(path, "setup.sh"), "r") as f:
+        script = f.read()
+
+    newpath = "export ROS_WORKSPACE=/workspace/fido_ws\n"
+    script = re.sub(r"(export ROS_WORKSPACE=).*(\n)", newpath, script)
+
+    with open(os.path.join(path, "setup.sh"), "w") as f:
+        f.write(script)
 
 
 def init_package(path, package):
