@@ -2,28 +2,29 @@ import typing
 from abc import ABC, abstractmethod
 from typing import Any, Callable, List, Mapping, Type
 
+from roslibpy.ros import Ros
+
 from ..errors import NotImplementedError, RobotError
+from ..ros import InstallFile, RobotProtocol
 
 if typing.TYPE_CHECKING:
     from ..world import World
     from .component import Sensor
 
 
-class Robot(ABC):
-    """Represents a physical robot.
+class Robot(ABC, RobotProtocol):
+    """Represents a physical or simulated robot."""
 
-    A robot is a navigable collection of sensors modeled by a
-    `fido.robot.Model`  which describes its physical appearance. Fido
-    provides a collection of premade robots that can be used directly in
-    a simulation.
-    """
+    _ros: Ros
+    _connected: bool = False
 
     _sensors: List["Sensor"] = []
     _closers: List[Callable[[], None]] = []
 
-    def __init__(self, name: str, model_name: str):
+    def __init__(self, name: str, model_name: str, physical: bool = False):
         self.name = name
         self.model_name = model_name
+        self.physical = physical
 
     def add_sensor(
         self, sensor_cls: Type["Sensor"], sensor_args: Mapping[str, Any] = {}
@@ -37,8 +38,28 @@ class Robot(ABC):
 
     def __init_sensors(self):
         for s in self._sensors:
-            c = s.handle_updates(self.world.ros())
+            c = s.handle_updates(self.ros())
             self._closers.append(c)
+
+    def connect(self, host: str, port: int) -> None:
+        ros = Ros(host, port)
+        ros.run()
+        self._ros = ros
+
+        def _set_connecting_flag(*args):
+            self._connected = True
+
+        self._ros.on_ready(_set_connecting_flag)
+
+    def ros(self) -> Ros:
+        if not self._connected:
+            if self.physical:
+                raise RobotError("ROS is not connected, please call connect() first")
+            else:
+                self._ros = self.world.ros()
+                self._connected = True
+
+        return self._ros
 
     def set_world(self, world: "World") -> None:
         """Set the world to use for this robot."""
@@ -81,3 +102,16 @@ class Robot(ABC):
         raise RobotError(
             "failed to call method on abstract robot"
         ) from NotImplementedError("stop() not implemented")
+
+    @abstractmethod
+    def ros_robot_description(self) -> str:
+        """Return the ROS specific robot description.
+
+        This is mainly used for building the launch file.
+        """
+        raise NotImplementedError("not implemented in robot protocol")
+
+    @abstractmethod
+    def ros_fill_dependency(self, installfile: InstallFile) -> None:
+        """Fill the needed dependency to the given installfile."""
+        raise NotImplementedError("not implemented in robot protocol")

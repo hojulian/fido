@@ -11,6 +11,11 @@ class RobotProtocol(Protocol):
     """RobotProtocol is implemented by a robot that is ROS compatible."""
 
     @abstractmethod
+    def connect(self) -> None:
+        """Connect to the robot via ROS bridge."""
+        raise NotImplementedError("not implemented in robot protocol")
+
+    @abstractmethod
     def ros_robot_description(self) -> str:
         """Return the ROS specific robot description.
 

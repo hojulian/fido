@@ -22,7 +22,7 @@ class RaceTrack(World):
         self._launch_file.include(
             "$(find gazebo_ros)/launch/empty_world.launch",
             {
-                "world_name": f"$(find aws_robomaker_racetrack_world)/worlds/racetrack_day.world",
+                "world_name": "$(find aws_robomaker_racetrack_world)/worlds/racetrack_day.world",
                 "paused": "false",
                 "use_sim_time": "true",
                 "gui": "false",

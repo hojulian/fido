@@ -92,7 +92,7 @@ class Gazebo(Simulator):
                 None,
             )
         )
-        return IFrame(src, "100%", "600px")
+        return IFrame(src, "100%", "800px")
 
     def __start_gzclient(self):
         try:

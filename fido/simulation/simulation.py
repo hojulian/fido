@@ -29,6 +29,8 @@ class Simulation(object):
     state. To start the container and simulation, call `start()`.
     """
 
+    _initialized: bool = False
+
     def __init__(self, simulator: "Simulator", world: "World", use_sim_time=True):
         self._simulator = simulator
         self._world = world
@@ -72,39 +74,48 @@ class Simulation(object):
         blocking call, it will block until the Simulator is successfully
         started.
 
-        Internally, this creates a new docker container containing the
-        `Simulator`, `World`, and `Robot` needed for the simulation. Once the
-        container is started, it will first build all the packages in the directory
-        using catkin_make. Then, fido will start the simulation by launching the launch
-        file on a seperate thread. Once the launch file is ready, fido will create a
-        persistent connection with ROS master running in the container using rosbridge.
+        Internally, if the simulation is not initialized, it creates a new docker
+        container containing the `Simulator`, `World`, and `Robot` needed for the
+        simulation. Once the container is started, it will first build all the packages
+        in the directory using catkin_make. Then, fido will start the simulation by
+        launching the launch file on a seperate thread. Once the launch file is ready,
+        fido will create apersistent connection with ROS master running in the container
+        using rosbridge.
+
+        If the simulation is initialized, it will simply call `start()` of the
+        undelying simulator.
         """
-        try:
-            # Start container
-            Core.start_container(self._container_id)
+        if not self._initialized:
+            try:
+                # Start container
+                Core.start_container(self._container_id)
 
-            # Compile all packages
-            self.__catkin_make()
+                # Compile all packages
+                self.__catkin_make()
 
-            # Start launch file
-            self._sim_proc = Process(target=self.__start_launch_file, daemon=True)
-            self._sim_proc.start()
-        except DockerError as exc:
-            raise DockerError("failed to start container") from exc
+                # Start launch file
+                self._sim_proc = Process(target=self.__start_launch_file, daemon=True)
+                self._sim_proc.start()
+            except DockerError as exc:
+                raise DockerError("failed to start container") from exc
 
-        # Connect to simulation
-        try:
-            # Start ros connection
-            self.__start_ros_client()
+            # Connect to simulation
+            try:
+                # Start ros connection
+                self.__start_ros_client()
 
-            # Prepare robots
-            self._world.prepare_robots()
+                # Prepare robots
+                self._world.prepare_robots()
 
-            # Start ros client
-            # Default timeout: 30 seconds
-            self._ros.run(30)
-        except (SimulatorError, Exception) as exc:
-            raise SimulationError("failed to start simulation") from exc
+                # Start ros client
+                # Default timeout: 30 seconds
+                self._ros.run(30)
+            except (SimulatorError, Exception) as exc:
+                raise SimulationError("failed to start simulation") from exc
+
+            self._initialized = True
+        else:
+            self._simulator.start()
 
     def __start_ros_client(self):
         host = "localhost"
