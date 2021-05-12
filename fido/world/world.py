@@ -1,12 +1,16 @@
 import os
+import typing
 from abc import ABC
 from typing import List
 
-from roslibpy import Ros
-
 from ..errors import NotImplementedError, WorldError
-from ..robot import Robot
 from ..ros import InstallFile, LaunchFile, WorldProtocol
+
+if typing.TYPE_CHECKING:
+    from roslibpy import Ros
+
+    from ..robot import Robot
+    from ..simulation import Simulation
 
 
 class World(ABC, WorldProtocol):
@@ -17,7 +21,7 @@ class World(ABC, WorldProtocol):
 
     _install_file: InstallFile
     _launch_file: LaunchFile
-    _robots: List[Robot]
+    _robots: List["Robot"]
 
     def __init__(self):
         self._install_file = InstallFile()
@@ -25,11 +29,22 @@ class World(ABC, WorldProtocol):
         self._robots = []
         self._included_rosbridge = False
 
-    def add(self, robot: Robot, x=0, y=0, z=0) -> None:
+    def add(
+        self, robot: "Robot", x: float = 0.0, y: float = 0.0, z: float = 0.0
+    ) -> None:
         """Add a robot to the world.
 
-        Internally, this is converted into a gazebo_ros spawn_model
-        call.
+        Internally, this will create the corresponding launch file instructions for
+        starting the given robot. The robot dependencies are added to the `.rosinstall`
+        file.
+
+        Once the files are added, the world is added to the robot as a parent.
+
+        Args:
+            robot (Robot): Robot to be added.
+            x (float): X position in the world.
+            y (float): Y position in the world.
+            z (float): Z position in the world.
         """
         # Set robot initial position
         setattr(robot, "x", x)
@@ -60,7 +75,7 @@ class World(ABC, WorldProtocol):
         self._robots.append(robot)
         robot.set_world(self)
 
-    def __include_ros_bridge(self, rosbridge_port=9090):
+    def __include_ros_bridge(self, rosbridge_port: int = 9090):
         self._launch_file.include(
             "$(find rosbridge_server)/launch/rosbridge_websocket.launch",
             {
@@ -78,33 +93,54 @@ class World(ABC, WorldProtocol):
         for r in self._robots:
             r.prepare()
 
-    def set_simulation(self, simulation) -> None:
-        """Set the parent simulation."""
+    def set_simulation(self, simulation: "Simulation") -> None:
+        """Set the parent simulation.
+
+        Args:
+            simulation (Simulation): Parent simulation.
+        """
         self._simulation = simulation
 
-    def remove(self, robot: Robot) -> None:
+    def remove(self, robot: "Robot") -> None:
         """Remove a robot from the world.
 
         Internally, this is converted into a gazebo_ros delete_model
         call.
+
+        Args:
+            robot (Robot): Robot to be removed.
         """
         raise WorldError(
             "failed to call method on abstract world"
         ) from NotImplementedError("remove() not implemented")
 
-    def robots(self) -> List[Robot]:
-        """Returns a list of robots."""
+    def robots(self) -> List["Robot"]:
+        """Returns a list of robots.
+
+        Returns:
+            The list of robots in this world.
+        """
         return self._robots
 
-    def ros(self) -> Ros:
-        """Return internal ROS client."""
+    def ros(self) -> "Ros":
+        """Return internal ROS client.
+
+        Returns:
+            The ROS client.
+        """
         return self._simulation.ros()
 
-    def export_files(self, path, package, rosbridge_port) -> None:
+    def export_files(self, path: str, package: str, rosbridge_port: int) -> None:
         """Export files to a given file.
 
-        Internally, .rosinstall file is exported to the root of the directory.
+        Internally, `.rosinstall` file is exported to the root of the directory.
         The launch file is exported to $PATH/src/$PACKAGE/launch.
+
+        Args:
+            path (str): Path to export files.
+            package (str): Name of simulation package. Name should only contains
+                alphanumeric characters and hypens. Normally named "fido-simulation".
+            rosbridge_port (int): Port number of rosbridge.
         """
         if not self._included_rosbridge:
             self.__include_ros_bridge(rosbridge_port)

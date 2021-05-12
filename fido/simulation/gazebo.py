@@ -1,3 +1,4 @@
+import typing
 from multiprocessing import Process
 from urllib.parse import urlencode, urlunparse
 
@@ -9,16 +10,19 @@ from ..core import Core
 from ..errors import DockerError, SimulatorError
 from .simulator import Simulator
 
+if typing.TYPE_CHECKING:
+    from roslibpy import Ros
+
 
 class Gazebo(Simulator):
     """Represents a Gazebo simulator."""
 
-    _started_client = False
+    _started_client: bool = False
 
-    def __init__(self, gui=True):
+    def __init__(self, gui: bool = True):
         super().__init__(gui)
 
-    def start(self):
+    def start(self) -> None:
         """Start the simulator.
 
         This starts the clock of the simulator.
@@ -28,7 +32,7 @@ class Gazebo(Simulator):
         except Exception as exc:
             raise SimulatorError("unable to start gazebo simulator") from exc
 
-    def stop(self):
+    def stop(self) -> None:
         """Pause the simulator.
 
         This will stop the simulation time as well.
@@ -38,11 +42,11 @@ class Gazebo(Simulator):
         except Exception as exc:
             raise SimulatorError("unable to stop gazebo simulator") from exc
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset the simulator.
 
         This will cause the simulator to reset itself to its original state.
-        It allows the simulator to reset without doing a destroy() and start().
+        It allows the simulator to reset without doing a `destroy()` and `start()`.
         This is useful in machine learning applications where each iteration
         requires a fresh state.
 
@@ -53,13 +57,17 @@ class Gazebo(Simulator):
         except Exception as exc:
             raise SimulatorError("unable to start gazebo simulator") from exc
 
-    def view(self):
+    def view(self) -> IFrame:
         """Visualize the simulator view.
 
-        This will display the view in a `IPython.core.display.display`. This is
-         compatible with Jupyter notebook.
+        This will start a gazebo GUI using gzclient and display on the noVNC page. Then
+        the page is displayed as an IFrame using `IPython.core.display.display`. This is
+        compatible with Jupyter notebook.
 
         Currently, there is no way to adjust the view just yet.
+
+        Returns:
+            Gazebo GUI in an IFrame.
         """
         if not self._started_client:
             try:
@@ -94,7 +102,7 @@ class Gazebo(Simulator):
         )
         return IFrame(src, "100%", "800px")
 
-    def __start_gzclient(self):
+    def __start_gzclient(self) -> None:
         try:
             exit_code, out = Core.container_exec(
                 self._simulation.container_id,
@@ -110,24 +118,33 @@ class Gazebo(Simulator):
         except (APIError, Exception) as exc:
             raise DockerError("failed to start gzclient") from exc
 
-    def time(self):
-        """Return the simulator time."""
+    def time(self) -> float:
+        """Return the simulator time.
+
+        Returns:
+            The simulator time.
+        """
         return self._time
 
-    def ros(self):
+    def ros(self) -> "Ros":
+        """Return internal ROS client.
+
+        Returns:
+            The ROS client.
+        """
         return self._simulation.ros()
 
-    def __pause_physics(self):
+    def __pause_physics(self) -> None:
         srv = roslibpy.Service(self.ros(), "/gazebo/pause_physics", "std_srvs/Empty")
         req = roslibpy.ServiceRequest()
         srv.call(req)
 
-    def __unpause_physics(self):
+    def __unpause_physics(self) -> None:
         srv = roslibpy.Service(self.ros(), "/gazebo/unpause_physics", "std_srvs/Empty")
         req = roslibpy.ServiceRequest()
         srv.call(req)
 
-    def __reset_simulation(self):
+    def __reset_simulation(self) -> None:
         srv = roslibpy.Service(self.ros(), "/gazebo/reset_simulation", "std_srvs/Empty")
         req = roslibpy.ServiceRequest()
         srv.call(req)

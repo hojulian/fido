@@ -2,12 +2,13 @@ import typing
 from abc import ABC, abstractmethod
 from typing import Any, Callable, List, Mapping, Type
 
-from roslibpy.ros import Ros
+from roslibpy import Ros
 
 from ..errors import NotImplementedError, RobotError
-from ..ros import InstallFile, RobotProtocol
+from ..ros import RobotProtocol
 
 if typing.TYPE_CHECKING:
+    from ..ros import InstallFile
     from ..world import World
     from .component import Sensor
 
@@ -29,7 +30,12 @@ class Robot(ABC, RobotProtocol):
     def add_sensor(
         self, sensor_cls: Type["Sensor"], sensor_args: Mapping[str, Any] = {}
     ) -> None:
-        """Add sensor to the robot."""
+        """Add sensor to the robot.
+
+        Args:
+            sensor_cls (Type[Sensor]): Sensor class.
+            sensor_args (dict): Arguments mapping for initializing sensor.
+        """
         self._sensors.append(sensor_cls(self, **sensor_args))
 
     def prepare(self) -> None:
@@ -42,6 +48,12 @@ class Robot(ABC, RobotProtocol):
             self._closers.append(c)
 
     def connect(self, host: str, port: int) -> None:
+        """Connect to the robot via ROS bridge.
+
+        Args:
+            host (str): Name or IP address of the ROS bridge host, e.g. `127.0.0.1`.
+            port (int): ROS bridge port, e.g. `9090`.
+        """
         ros = Ros(host, port)
         ros.run()
         self._ros = ros
@@ -52,6 +64,11 @@ class Robot(ABC, RobotProtocol):
         self._ros.on_ready(_set_connecting_flag)
 
     def ros(self) -> Ros:
+        """Return internal ROS client.
+
+        Returns:
+            The ROS client.
+        """
         if not self._connected:
             if self.physical:
                 raise RobotError("ROS is not connected, please call connect() first")
@@ -62,7 +79,11 @@ class Robot(ABC, RobotProtocol):
         return self._ros
 
     def set_world(self, world: "World") -> None:
-        """Set the world to use for this robot."""
+        """Set the world to use for this robot.
+
+        Args:
+            world (World): Parent world.
+        """
         self.world = world
 
     @abstractmethod
@@ -73,6 +94,11 @@ class Robot(ABC, RobotProtocol):
         To move backwards, set speed to negative. If the given speed is
         larger than the maximum speed, it will be set to the maximum
         speed.
+
+        Args:
+            distance (float): Distance to travel.
+            duration (float): Time duration to travel for (in seconds).
+            speed (float): Travel speed.
         """
         raise RobotError(
             "failed to call method on abstract robot"
@@ -87,6 +113,11 @@ class Robot(ABC, RobotProtocol):
         anti-clockwise, set the speed to negative. If the given speed is
         larger  than the maximum speed, it will be set to the maximum
         speed.
+
+        Args:
+            angle (float): Angle to rotate (in degrees).
+            duration (float): Time duration to rotate for (in seconds).
+            speed (float): Rotation speed (radian per seconds).
         """
         raise RobotError(
             "failed to call method on abstract robot"
@@ -98,6 +129,9 @@ class Robot(ABC, RobotProtocol):
 
         This is a blocking call. It will block execution until the robot
         is gracefully stopped unless `forced` is set to `True`.
+
+        Args:
+            forced (bool): Forcefully stop the robot or not.
         """
         raise RobotError(
             "failed to call method on abstract robot"
@@ -107,11 +141,25 @@ class Robot(ABC, RobotProtocol):
     def ros_robot_description(self) -> str:
         """Return the ROS specific robot description.
 
-        This is mainly used for building the launch file.
+        This is mainly used for building the launch file. E.g.
+        `robot_description/urdf/model.urdf`.
+
+        Returns:
+            The robot_description used by the launch file.
         """
         raise NotImplementedError("not implemented in robot protocol")
 
     @abstractmethod
-    def ros_fill_dependency(self, installfile: InstallFile) -> None:
-        """Fill the needed dependency to the given installfile."""
+    def ros_fill_dependency(self, installfile: "InstallFile") -> None:
+        """Fill the needed dependencies to the given installfile.
+
+        E.g. `installfile.git(
+                "src/turtlebot3",
+                "https://github.com/ROBOTIS-GIT/turtlebot3.git",
+                "master",
+            )`
+
+        Args:
+            installfile (InstallFile): InstallFile for filling dependencies.
+        """
         raise NotImplementedError("not implemented in robot protocol")

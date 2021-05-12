@@ -1,4 +1,5 @@
 import os
+from typing import Any, List, Mapping
 
 import yaml
 
@@ -12,9 +13,9 @@ class InstallFile(object):
     https://docs.ros.org/en/independent/api/rosinstall/html/rosinstall_file_format.html
     """
 
-    _dependencies = []
+    _dependencies: List[Mapping[Any, Any]] = []
 
-    def git(self, localpath, src, branch="master"):
+    def git(self, localpath: str, src: str, branch: str = "master") -> None:
         """Add a git based source.
 
         Args:
@@ -32,7 +33,7 @@ class InstallFile(object):
             }
         )
 
-    def setup_file(self, localpath):
+    def setup_file(self, localpath: str) -> None:
         """Add a setup-file source.
 
         Args:
@@ -46,7 +47,7 @@ class InstallFile(object):
             }
         )
 
-    def to_string(self):
+    def to_string(self) -> str:
         """Output file content in string.
 
         Returns:
@@ -54,7 +55,7 @@ class InstallFile(object):
         """
         return yaml.dump(self._dependencies, sort_keys=True, default_flow_style=False)
 
-    def to_file(self, path):
+    def to_file(self, path: str) -> None:
         """Output file content to a file in a given path.
 
         The output file is located in $PATH/.rosinstall.

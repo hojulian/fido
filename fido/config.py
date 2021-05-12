@@ -1,7 +1,9 @@
 from .core import Core
 
 
-def set_docker_host(base_url="tcp://127.0.0.1:1234", version="1.35"):
+def set_docker_host(
+    base_url: str = "unix:///var/run/docker.sock", version: str = "1.35"
+) -> None:
     """Set the Docker client connection details.
 
     Args:
@@ -12,13 +14,13 @@ def set_docker_host(base_url="tcp://127.0.0.1:1234", version="1.35"):
             automatically detect the server's version. Default: `1.35`.
 
     Raises:
-        fido.errors.DockerError: If the specified Docker server does not exist,
-        or failed to connect.
+        DockerError: If the specified Docker server does not exist, or failed to
+        connect.
     """
     Core.set_docker_host(base_url, version)
 
 
-def set_logging(node_name, level):
+def set_logging(node_name: str, level: str) -> None:
     """Enable logging for a given node, and its logging level.
 
     This is a legacy feature inherited from `robot_services`. See

@@ -31,7 +31,9 @@ class Simulation(object):
 
     _initialized: bool = False
 
-    def __init__(self, simulator: "Simulator", world: "World", use_sim_time=True):
+    def __init__(
+        self, simulator: "Simulator", world: "World", use_sim_time: bool = True
+    ):
         self._simulator = simulator
         self._world = world
         self._use_sim_time = use_sim_time
@@ -117,13 +119,13 @@ class Simulation(object):
         else:
             self._simulator.start()
 
-    def __start_ros_client(self):
+    def __start_ros_client(self) -> None:
         host = "localhost"
         port = self._rosbridge_port
         client = Ros(host=host, port=port)
         self._ros = client
 
-    def __catkin_make(self):
+    def __catkin_make(self) -> None:
         try:
             exit_code, out = Core.container_exec(
                 self._container_id,
@@ -136,18 +138,18 @@ class Simulation(object):
         except (APIError, Exception) as exc:
             raise DockerError("failed to run catkin_make") from exc
 
-    def __with_bash(self, cmd):
+    def __with_bash(self, cmd: str) -> str:
         ros_setup = "/opt/ros/melodic/setup.bash"
         package_setup = "/workspace/fido_ws/setup.bash"
         return f'/bin/bash -c "source {ros_setup} && source {package_setup} && {cmd}"'
 
-    def __with_catkin_bash(self, cmd):
+    def __with_catkin_bash(self, cmd: str) -> str:
         ros_setup = "/opt/ros/melodic/setup.bash"
         package_setup = "/workspace/fido_ws/setup.bash"
         catkin_setup = "/workspace/fido_ws/devel/setup.bash"
         return f'/bin/bash -c "source {ros_setup} && source {package_setup} && source {catkin_setup} && {cmd}"'
 
-    def __start_launch_file(self):
+    def __start_launch_file(self) -> None:
         try:
             exit_code, out = Core.container_exec(
                 self._container_id,
@@ -161,7 +163,11 @@ class Simulation(object):
             raise DockerError("failed to run launch file") from exc
 
     def ros(self) -> Ros:
-        """Returns the ros client."""
+        """Returns the ros client.
+
+        Returns:
+            The ROS client.
+        """
         if self._ros is None:
             self.__start_ros_client()
         return self._ros

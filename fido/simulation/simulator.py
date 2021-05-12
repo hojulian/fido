@@ -2,12 +2,12 @@ import time
 import typing
 from abc import ABC, abstractmethod
 
-from IPython.display import IFrame
-
 from ..errors import NotImplementedError, SimulatorError
 from ..ros import SimulatorProtocol
 
 if typing.TYPE_CHECKING:
+    from IPython.display import IFrame
+
     from .simulation import Simulation
 
 
@@ -22,12 +22,16 @@ class Simulator(ABC, SimulatorProtocol):
 
     _simulation: "Simulation"
 
-    def __init__(self, gui=True):
+    def __init__(self, gui: bool = True):
         self._gui = gui
         self._time = time.time()
 
-    def set_simulation(self, simulation) -> None:
-        """Set the parent simulation."""
+    def set_simulation(self, simulation: "Simulation") -> None:
+        """Set the parent simulation.
+
+        Args:
+            simulation (Simulation): Parent simulation.
+        """
         self._simulation = simulation
 
     @abstractmethod
@@ -55,7 +59,7 @@ class Simulator(ABC, SimulatorProtocol):
         """Reset the simulator.
 
         This will cause the simulator to reset itself to its original state.
-        It allows the simulator to reset without doing a destroy() and start().
+        It allows the simulator to reset without doing a `destroy()` and `start()`.
         This is useful in machine learning applications where each iteration
         requires a fresh state.
 
@@ -66,11 +70,11 @@ class Simulator(ABC, SimulatorProtocol):
         ) from NotImplementedError("reset() not implemented")
 
     @abstractmethod
-    def view(self) -> IFrame:
+    def view(self) -> "IFrame":
         """Visualize the simulator view.
 
         This will display the view in a `IPython.core.display.display`. This is
-         compatible with Jupyter notebook.
+        compatible with Jupyter notebook.
 
         Currently, there is no way to adjust the view just yet.
         """
@@ -80,7 +84,11 @@ class Simulator(ABC, SimulatorProtocol):
 
     @abstractmethod
     def time(self) -> float:
-        """Return the simulator time."""
+        """Return the simulator time.
+
+        Returns:
+            The simulator time.
+        """
         raise SimulatorError(
             "failed to call method on abstract simulator"
         ) from NotImplementedError("time() not implemented")

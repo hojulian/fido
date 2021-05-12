@@ -5,7 +5,17 @@ from catkin_pkg.package_templates import PackageTemplate, create_package_files
 from rosinstall.rosws_cli import RoswsCLI
 
 
-def prepare_workspace(path):
+def prepare_workspace(path: str) -> None:
+    """Prepare workspace at the given path.
+
+    This is equivalent to calling `rosws init` on the given path.
+
+    Internal use only.
+
+    Args:
+        path (str): Local workspace path.
+    """
+
     cli = RoswsCLI()
     cli.cmd_init([path])
 
@@ -20,7 +30,18 @@ def prepare_workspace(path):
         f.write(script)
 
 
-def init_package(path, package):
+def init_package(path: str, package: str) -> None:
+    """Create a package at the given path.
+
+    This is equivalent to calling `catkin_create_pkg` on the given path.
+
+    Internal use only.
+
+    Args:
+        path (str): Path to create package.
+        package (str): Package name.
+    """
+
     package_name = package
     description = "Simulation package created by Fido. DO NOT EDIT."
     maintainer = "Fido maintainers"
@@ -50,6 +71,16 @@ def init_package(path, package):
     os.makedirs(os.path.join(path, "src", package, "scripts"))
 
 
-def gather_dependencies(path):
+def gather_dependencies(path: str) -> None:
+    """Gather all dependencies.
+
+    This is equivalent to calling `rosws update` on the given workspace path.
+
+    Internal use only.
+
+    Args:
+        path (str): Workspace path.
+    """
+
     cli = RoswsCLI()
     cli.cmd_update(path, ["-t", path])

@@ -1,5 +1,6 @@
 import os
 import xml.etree.ElementTree as ET
+from typing import Any, Mapping
 
 
 class LaunchFile(object):
@@ -11,11 +12,13 @@ class LaunchFile(object):
     see http://wiki.ros.org/roslaunch/XML.
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self._name = name
         self._tree = ET.Element("launch")
 
-    def include(self, file, args={}, envs={}):
+    def include(
+        self, file: str, args: Mapping[str, str] = {}, envs: Mapping[str, str] = {}
+    ) -> None:
         """Add an `<include>` tag to launch file.
 
         The `<include>` tag enables you to import another roslaunch XML file into the
@@ -37,7 +40,9 @@ class LaunchFile(object):
 
         self._tree.append(e)
 
-    def node(self, pkg, node_type, name, args={}):
+    def node(
+        self, pkg: str, node_type: str, name: str, args: Mapping[str, Any] = {}
+    ) -> None:
         """Add an `<node>` tag to launch file.
 
         The `<node>` tag specifies a ROS node that you wish to have launched. This is
@@ -75,7 +80,7 @@ class LaunchFile(object):
                 args_pairs.append(str(v))
         return " ".join(args_pairs)
 
-    def param(self, name, command):
+    def param(self, name: str, command: str) -> None:
         """Add an `<param>` tag to launch file.
 
         The `<param>` tag defines a parameter to be set on the Parameter Server.
@@ -101,7 +106,7 @@ class LaunchFile(object):
 
         self._tree.append(e)
 
-    def to_string(self):
+    def to_string(self) -> str:
         """Output file content in string.
 
         Returns:
@@ -109,7 +114,7 @@ class LaunchFile(object):
         """
         return ET.tostring(self._tree).decode("utf-8")
 
-    def to_file(self, path):
+    def to_file(self, path: str) -> None:
         """Output file content to a file in a given path.
 
         The output file is located in $PATH/$NAME.launch.
