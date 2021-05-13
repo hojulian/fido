@@ -10,7 +10,7 @@ from docker.models.containers import ExecResult
 from .errors import DockerError
 
 
-class Core:
+class Core(object):
     """Core provides utility functions for Fido internal use."""
 
     _docker_client: DockerClient = None
@@ -114,7 +114,7 @@ class Core:
                     Exit code for the executed command or None if stream is True.
 
                 output: (generator, bytes, or tuple):
-                    If stream=True, a generator yielding response chunks. A bytestring
+                    If `stream=True`, a generator yielding response chunks. A bytestring
                     containing response data otherwise.
 
         Raises:

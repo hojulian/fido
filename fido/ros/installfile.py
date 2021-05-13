@@ -58,7 +58,7 @@ class InstallFile(object):
     def to_file(self, path: str) -> None:
         """Output file content to a file in a given path.
 
-        The output file is located in $PATH/.rosinstall.
+        The output file is located in `$PATH/.rosinstall`.
 
         Args:
             path (str): Path where the file is output to.

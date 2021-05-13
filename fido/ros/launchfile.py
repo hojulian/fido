@@ -117,7 +117,7 @@ class LaunchFile(object):
     def to_file(self, path: str) -> None:
         """Output file content to a file in a given path.
 
-        The output file is located in $PATH/$NAME.launch.
+        The output file is located in `$PATH/$NAME.launch`.
 
         Args:
             path (str): Path where the file is output to.

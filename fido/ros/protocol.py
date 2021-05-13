@@ -37,11 +37,14 @@ class RobotProtocol(Protocol):
     def ros_fill_dependency(self, installfile: InstallFile) -> None:
         """Fill the needed dependencies to the given installfile.
 
-        E.g. `installfile.git(
-                "src/turtlebot3",
-                "https://github.com/ROBOTIS-GIT/turtlebot3.git",
-                "master",
-            )`
+        E.g.
+        ```python
+        installfile.git(
+            "src/turtlebot3",
+            "https://github.com/ROBOTIS-GIT/turtlebot3.git",
+            "master",
+        )`
+        ```
 
         Args:
             installfile (InstallFile): InstallFile for filling dependencies.

@@ -75,7 +75,8 @@ class RaceTrack(World):
         Args:
             path (str): Path to export files.
             package (str): Name of simulation package. Name should only contains
-                alphanumeric characters and hypens. Normally named "fido-simulation".
+                alphanumeric characters and underscores. Normally named as
+                `fido_simulation`.
             rosbridge_port (int): Port number of rosbridge.
         """
         super().export_files(path, package, rosbridge_port)

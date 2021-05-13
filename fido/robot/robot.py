@@ -72,9 +72,9 @@ class Robot(ABC, RobotProtocol):
         if not self._connected:
             if self.physical:
                 raise RobotError("ROS is not connected, please call connect() first")
-            else:
-                self._ros = self.world.ros()
-                self._connected = True
+            
+            self._ros = self.world.ros()
+            self._connected = True
 
         return self._ros
 
