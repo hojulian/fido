@@ -6,7 +6,7 @@
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://hojulian.github.io/blog"/>
     <subtitle>Fido Blog</subtitle>
-    <icon>https://hojulian.github.io/img/favicon.ico</icon>
+    <icon>https://hojulian.github.io/data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;🔮&lt;/text&gt;&lt;/svg&gt;</icon>
     <entry>
         <title type="html"><![CDATA[Welcome]]></title>
         <id>welcome</id>
