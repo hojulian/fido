@@ -1,3 +1,4 @@
+import os
 import typing
 from multiprocessing import Process
 
@@ -13,6 +14,15 @@ if typing.TYPE_CHECKING:
 
     from ..world import World
     from .simulator import Simulator
+
+# Default fido temporary directory
+DEFAULT_FIDO_DIR = ".fido"
+
+# Default ROS connection timeout: 30 seconds
+DEFAULT_ROS_TIMEOUT = 30
+
+# Default ROS client host address
+DEFAULT_ROS_CLIENT_HOST = "localhost"
 
 
 class Simulation(object):
@@ -39,7 +49,9 @@ class Simulation(object):
         self._use_sim_time = use_sim_time
 
         self._sim_id = Core.generate_sim_id()
-        self._package_path = f".fido/sim_{self._sim_id}"
+        self._package_path = self.__ensure_path(
+            os.path.join(DEFAULT_FIDO_DIR, f"sim_{self._sim_id}")
+        )
         self._package_name = "fido_simulation"
         self._vnc_port = Core.generate_port()
         self._rosbridge_port = Core.generate_port()
@@ -69,6 +81,11 @@ class Simulation(object):
         self._simulator.set_simulation(self)
         self._world.set_simulation(self)
 
+    def __ensure_path(self, path: str) -> str:
+        if not os.path.exists(path):
+            os.makedirs(path, exist_ok=True)
+        return path
+
     def start(self) -> None:
         """Start the simulation.
 
@@ -80,12 +97,12 @@ class Simulation(object):
         container containing the `Simulator`, `World`, and `Robot` needed for the
         simulation. Once the container is started, it will first build all the packages
         in the directory using catkin_make. Then, fido will start the simulation by
-        launching the launch file on a seperate thread. Once the launch file is ready,
+        launching the launch file on a separate thread. Once the launch file is ready,
         fido will create apersistent connection with ROS master running in the container
         using rosbridge.
 
         If the simulation is initialized, it will simply call `start()` of the
-        undelying simulator.
+        underlying simulator.
         """
         if not self._initialized:
             try:
@@ -110,8 +127,7 @@ class Simulation(object):
                 self._world.prepare_robots()
 
                 # Start ros client
-                # Default timeout: 30 seconds
-                self._ros.run(30)
+                self._ros.run(DEFAULT_ROS_TIMEOUT)
             except (SimulatorError, Exception) as exc:
                 raise SimulationError("failed to start simulation") from exc
 
@@ -120,7 +136,7 @@ class Simulation(object):
             self._simulator.start()
 
     def __start_ros_client(self) -> None:
-        host = "localhost"
+        host = DEFAULT_ROS_CLIENT_HOST
         port = self._rosbridge_port
         client = Ros(host=host, port=port)
         self._ros = client
@@ -141,13 +157,17 @@ class Simulation(object):
     def __with_bash(self, cmd: str) -> str:
         ros_setup = "/opt/ros/melodic/setup.bash"
         package_setup = "/workspace/fido_ws/setup.bash"
-        return f'/bin/bash -c "source {ros_setup} && source {package_setup} && {cmd}"'
+        return '/bin/bash -c "source {} && source {} && {}"'.format(
+            ros_setup, package_setup, cmd
+        )
 
     def __with_catkin_bash(self, cmd: str) -> str:
         ros_setup = "/opt/ros/melodic/setup.bash"
         package_setup = "/workspace/fido_ws/setup.bash"
         catkin_setup = "/workspace/fido_ws/devel/setup.bash"
-        return f'/bin/bash -c "source {ros_setup} && source {package_setup} && source {catkin_setup} && {cmd}"'
+        return '/bin/bash -c "source {} && source {} && source {} && {}"'.format(
+            ros_setup, package_setup, catkin_setup, cmd
+        )
 
     def __start_launch_file(self) -> None:
         try:
@@ -233,7 +253,7 @@ class Simulation(object):
     def container_id(self) -> str:
         """Return the docker container ID of this simulation.
 
-        This is used by simulator to execute command on the undelying docker container.
+        This is used by simulator to execute command on the underlying docker container.
 
         Although not recommended, this container ID can be used with docker-cli to
         access and manage the simulation container.

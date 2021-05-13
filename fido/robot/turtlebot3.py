@@ -11,6 +11,9 @@ from .robot import Robot
 if typing.TYPE_CHECKING:
     from ..ros import InstallFile
 
+# Frequency in Hertz (hz)
+DEFAULT_LOOP_FREQUENCY = 10
+
 
 class Turtlebot3(Robot):
     """Represents a Turtlebot3 Burger robot.
@@ -41,8 +44,7 @@ class Turtlebot3(Robot):
             duration (float): Time duration to travel for (in seconds).
             speed (float): Travel speed.
         """
-        # Frequency in Hertz (hz)
-        freq = 10
+        freq = DEFAULT_LOOP_FREQUENCY
 
         msg = Twist()
         t = Topic(self.ros(), "/cmd_vel", msg.ros_type())
@@ -80,8 +82,7 @@ class Turtlebot3(Robot):
             duration (float): Time duration to rotate for (in seconds).
             speed (float): Rotation speed (radian per seconds).
         """
-        # Frequency in Hertz (hz)
-        freq = 10
+        freq = DEFAULT_LOOP_FREQUENCY
 
         msg = Twist()
         t = Topic(self.ros(), "/cmd_vel", msg.ros_type())

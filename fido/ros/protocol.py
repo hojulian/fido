@@ -2,7 +2,6 @@ import typing
 from abc import abstractmethod
 from typing import Protocol
 
-from ..errors import NotImplementedError
 from .installfile import InstallFile
 
 if typing.TYPE_CHECKING:

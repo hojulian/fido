@@ -4,7 +4,7 @@ from typing import Any, Callable, Mapping
 
 from roslibpy import Topic
 
-from ...errors import NotImplementedError, RobotError
+from ...errors import RobotError
 
 if typing.TYPE_CHECKING:
     from roslibpy import Ros

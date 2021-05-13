@@ -68,13 +68,6 @@ class DockerError(Error):
         super(DockerError, self).__init__(msg)
 
 
-class NotImplementedError(Error):
-    """Represents an error for calling a not yet implemented method."""
-
-    def __init__(self, msg: str):
-        super(NotImplementedError, self).__init__(msg)
-
-
 class DTypeError(Error):
     """Represents an error for dType."""
 

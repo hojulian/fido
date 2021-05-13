@@ -3,6 +3,7 @@ import re
 
 from catkin_pkg.package_templates import PackageTemplate, create_package_files
 from rosinstall.rosws_cli import RoswsCLI
+from vcstool.commands import import_
 
 
 def prepare_workspace(path: str) -> None:
@@ -81,6 +82,20 @@ def gather_dependencies(path: str) -> None:
     Args:
         path (str): Workspace path.
     """
+    path = os.path.abspath(path)
 
-    cli = RoswsCLI()
-    cli.cmd_update(path, ["-t", path])
+    # Workaround for dealing with local path with spaces.
+    # Note: This is a slower alternative to `rosws`.
+    if " " in path:
+        import_.main(
+            args=[
+                "--input",
+                os.path.join(path, ".rosinstall"),
+                "--shallow",
+                "--debug",
+                path,
+            ]
+        )
+    else:
+        cli = RoswsCLI()
+        cli.cmd_update(path, ["-t", path])

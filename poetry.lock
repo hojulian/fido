@@ -354,7 +354,7 @@ docspec = ">=0.2.0,<0.3.0"
 
 [[package]]
 name = "docutils"
-version = "0.17"
+version = "0.17.1"
 description = "Docutils -- Python Documentation Utilities"
 category = "main"
 optional = false
@@ -1518,6 +1518,17 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
+name = "vcstool"
+version = "0.2.15"
+description = "vcstool provides a command line tool to invoke vcs commands on multiple repositories."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+PyYAML = "*"
+
+[[package]]
 name = "vcstools"
 version = "0.1.42"
 description = "VCS/SCM source control library for svn, git, hg, and bzr"
@@ -1624,7 +1635,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "a21b51db1c1aa3473d097de14925a885c64f6dc400972427a50d1481c9fc756e"
+content-hash = "025bfc076325feb535262584e608a343822c4c4593352c511d918841112be56b"
 
 [metadata.files]
 anyio = [
@@ -1858,8 +1869,8 @@ docspec-python = [
     {file = "docspec_python-0.1.0-py3-none-any.whl", hash = "sha256:86561c77dc9ebe4f7d9c224c0740cd66407db849a78580a7509963d4e2c02dfe"},
 ]
 docutils = [
-    {file = "docutils-0.17-py2.py3-none-any.whl", hash = "sha256:a71042bb7207c03d5647f280427f14bfbd1a65c9eb84f4b341d85fafb6bb4bdf"},
-    {file = "docutils-0.17.tar.gz", hash = "sha256:e2ffeea817964356ba4470efba7c2f42b6b0de0b04e66378507e3e2504bbff4c"},
+    {file = "docutils-0.17.1-py2.py3-none-any.whl", hash = "sha256:cf316c8370a737a022b72b56874f6602acf974a37a9fba42ec2876387549fc61"},
+    {file = "docutils-0.17.1.tar.gz", hash = "sha256:686577d2e4c32380bb50cbb22f575ed742d58168cee37e99117a854bcd88f125"},
 ]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
@@ -2516,6 +2527,10 @@ typing-extensions = [
 urllib3 = [
     {file = "urllib3-1.26.3-py2.py3-none-any.whl", hash = "sha256:1b465e494e3e0d8939b50680403e3aedaa2bc434b7d5af64dfd3c958d7f5ae80"},
     {file = "urllib3-1.26.3.tar.gz", hash = "sha256:de3eedaad74a2683334e282005cd8d7f22f4d55fa690a2a1020a416cb0a47e73"},
+]
+vcstool = [
+    {file = "vcstool-0.2.15-py3-none-any.whl", hash = "sha256:1bbdb817fd45da6ca67480a08fbfc8e791ec6c95b1de5f6ac126d84129648e13"},
+    {file = "vcstool-0.2.15.tar.gz", hash = "sha256:b1fce6fcef7b117b245a72dc8658a128635749d01dc7e9d1316490f89f9c2fde"},
 ]
 vcstools = [
     {file = "vcstools-0.1.42-py3-none-any.whl", hash = "sha256:451d9efc1d7e0089a4a4488ec4be13b66d820c06e9d656011aa5c94c5b0385f1"},

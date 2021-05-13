@@ -3,7 +3,7 @@ import typing
 from abc import ABC
 from typing import List
 
-from ..errors import NotImplementedError, WorldError
+from ..errors import WorldError
 from ..ros import InstallFile, LaunchFile, WorldProtocol
 
 if typing.TYPE_CHECKING:

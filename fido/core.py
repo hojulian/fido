@@ -7,10 +7,10 @@ from docker import DockerClient
 from docker.errors import APIError, NotFound
 from docker.models.containers import ExecResult
 
-from .errors import DockerError, NotImplementedError
+from .errors import DockerError
 
 
-class Core(object):
+class Core:
     """Core provides utility functions for Fido internal use."""
 
     _docker_client: DockerClient = None
@@ -105,7 +105,7 @@ class Core(object):
             cmd (str): Command to execute.
             workdir (str): Path to working directory for this exec session.
             env (dict): A dictionary of strings in the following format
-                {"PASSWORD": "xxx"}.
+                `{"PASSWORD": "xxx"}`.
             stream (bool): Stream response data. Default: False.
 
         Returns:
@@ -157,10 +157,10 @@ class Core(object):
         Returns:
             A random simulation ID in the form of UUID.
         """
-        sim_id = str(uuid4())
+        sim_id = str(uuid4()).split("-")[0]
 
         while sim_id in cls._used_ids:
-            sim_id = str(uuid4())
+            sim_id = str(uuid4()).split("-")[0]
 
         cls._used_ids.append(sim_id)
         return sim_id

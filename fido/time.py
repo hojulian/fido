@@ -1,6 +1,3 @@
-from .errors import NotImplementedError
-
-
 class Time(object):
     """Represents time in Fido.
 

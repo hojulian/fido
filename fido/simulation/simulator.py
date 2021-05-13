@@ -2,7 +2,7 @@ import time
 import typing
 from abc import ABC, abstractmethod
 
-from ..errors import NotImplementedError, SimulatorError
+from ..errors import SimulatorError
 from ..ros import SimulatorProtocol
 
 if typing.TYPE_CHECKING:

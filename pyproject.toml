@@ -10,9 +10,10 @@ python = "^3.8"
 docker = "^4.4.4"
 ipython = "^7.21.0"
 PyYAML = "^5.4.1"
-rosinstall = "^0.7.8"
 roslibpy = "^1.2.0"
 numpy = "^1.20.2"
+vcstool = "^0.2.15"
+rosinstall = "^0.7.8"
 
 [tool.poetry.dev-dependencies]
 black = "^20.8b1"

@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: coverage deps help lint test
+.PHONY: coverage deps help lint test clear-cache
 
 coverage:  ## Run tests with coverage
 	poetry run coverage erase
@@ -16,3 +16,6 @@ lint:  ## Lint and static-check
 
 test:  ## Run tests
 	poetry run pytest -ra
+
+clear-cache:  ## Clear local fido cache
+	rm -rf .fido/* && mkdir .fido
