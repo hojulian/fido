@@ -11,14 +11,16 @@ Fido currently support Linux, MacOS, and Windows via WSL2.
 
 ## Installation
 
+*Fido is not yet on PyPi, but will be soon!*
+
 Using pip:
 
 ```shell
-pip install fido
+pip install git+https://github.com/hojulian/fido.git
 ```
 
-Or using Poetry:
+Using Poetry:
 
 ```shell
-poetry add fido
+poetry add git+https://github.com/hojulian/fido.git
 ```

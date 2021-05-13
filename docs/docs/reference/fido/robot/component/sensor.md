@@ -11,9 +11,9 @@ class Sensor(object)
 
 Represents a sensor on the robot.
 
-Internally, a sensor listens to a specific ROS topic and updates the robot&#x27;s
+Internally, a sensor listens to a specific ROS topic and updates the robot's
 internal state. For instance, a Odomer listens to the /odom topic and update the
-robot&#x27;s `x`, `y`, `z` coordinates. A sensor only starts listening to updates once
+robot's `x`, `y`, `z` coordinates. A sensor only starts listening to updates once
 the simulation has started. It will stop updating once the simulation is destroyed.
 
 ### handle\_updates
@@ -23,7 +23,7 @@ the simulation has started. It will stop updating once the simulation is destroy
  | def handle_updates(ros: "Ros") -> Callable[[], None]
 ```
 
-Handle incoming update from ROS topic and update robot&#x27;s state accordingly.
+Handle incoming update from ROS topic and update robot's state accordingly.
 
 **Arguments**:
 
@@ -48,7 +48,7 @@ Represents an Odometry updater.
  | def handle_updates(ros: "Ros") -> Callable[[], None]
 ```
 
-Handle incoming update for `/odom` topic and update robot&#x27;s position
+Handle incoming update for `/odom` topic and update robot's position
 accordingly.
 
 **Arguments**:
@@ -74,7 +74,7 @@ Represents a Lidar sensor.
  | def handle_updates(ros: "Ros") -> Callable[[], None]
 ```
 
-Handle incoming update for `/scan` topic and update robot&#x27;s ranges
+Handle incoming update for `/scan` topic and update robot's ranges
 accordingly.
 
 **Arguments**:

@@ -17,7 +17,7 @@ Set the Docker client connection details.
   `unix:///var/run/docker.sock` or `tcp://127.0.0.1:1234`. Default:
   `tcp://127.0.0.1:1234`.
 - `version` _str_ - The version of the API to use. Set to `auto` to
-  automatically detect the server&#x27;s version. Default: `1.35`.
+  automatically detect the server's version. Default: `1.35`.
   
 
 **Raises**:
@@ -34,10 +34,10 @@ def set_logging(node_name: str, level: str) -> None
 Enable logging for a given node, and its logging level.
 
 This is a legacy feature inherited from `robot_services`. See
-`robot_services`&#x27;s documentation for more details.
+`robot_services`'s documentation for more details.
 
 **Arguments**:
 
 - `node_name` _str_ - The name of the node.
-- `level` _str_ - Description of the log&#x27;s type.
+- `level` _str_ - Description of the log's type.
 

@@ -22,9 +22,9 @@ see http://wiki.ros.org/roslaunch/XML.
  | def include(file: str, args: Mapping[str, str] = {}, envs: Mapping[str, str] = {}) -> None
 ```
 
-Add an `&lt;include&gt;` tag to launch file.
+Add an `<include>` tag to launch file.
 
-The `&lt;include&gt;` tag enables you to import another roslaunch XML file into the
+The `<include>` tag enables you to import another roslaunch XML file into the
 current file.
 
 See http://wiki.ros.org/roslaunch/XML/include for more details.
@@ -41,9 +41,9 @@ See http://wiki.ros.org/roslaunch/XML/include for more details.
  | def node(pkg: str, node_type: str, name: str, args: Mapping[str, Any] = {}) -> None
 ```
 
-Add an `&lt;node&gt;` tag to launch file.
+Add an `<node>` tag to launch file.
 
-The `&lt;node&gt;` tag specifies a ROS node that you wish to have launched. This is
+The `<node>` tag specifies a ROS node that you wish to have launched. This is
 the most common roslaunch tag as it supports the most important features:
 bringing up and taking down nodes.
 
@@ -64,9 +64,9 @@ See http://wiki.ros.org/roslaunch/XML/node for more details.
  | def param(name: str, command: str) -> None
 ```
 
-Add an `&lt;param&gt;` tag to launch file.
+Add an `<param>` tag to launch file.
 
-The `&lt;param&gt;` tag defines a parameter to be set on the Parameter Server.
+The `<param>` tag defines a parameter to be set on the Parameter Server.
 
 See http://wiki.ros.org/roslaunch/XML/param for more details.
 
@@ -100,7 +100,7 @@ Output file content in string.
 
 Output file content to a file in a given path.
 
-The output file is located in $PATH/$NAME.launch.
+The output file is located in `$PATH/$NAME.launch`.
 
 **Arguments**:
 

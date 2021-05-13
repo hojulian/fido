@@ -15,16 +15,18 @@ Fido is developed as an independent study project at Brandeis University for rob
 
 ## Installation
 
+*Fido is not yet on PyPi, but will be soon!*
+
 Using pip:
 
 ```bash
-pip install fido
+pip install git+https://github.com/hojulian/fido.git
 ```
 
 Using Poetry:
 
 ```bash
-poetry add fido
+poetry add git+https://github.com/hojulian/fido.git
 ```
 
 ## Resources

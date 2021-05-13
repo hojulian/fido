@@ -108,6 +108,7 @@ The launch file is exported to $PATH/src/$PACKAGE/launch.
 
 - `path` _str_ - Path to export files.
 - `package` _str_ - Name of simulation package. Name should only contains
-  alphanumeric characters and hypens. Normally named &quot;fido-simulation&quot;.
+  alphanumeric characters and underscores. Normally named as
+  `fido_simulation`.
 - `rosbridge_port` _int_ - Port number of rosbridge.
 

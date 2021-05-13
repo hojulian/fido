@@ -50,11 +50,15 @@ This is mainly used for building the launch file. E.g.
 
 Fill the needed dependencies to the given installfile.
 
-E.g. `installfile.git(
-&quot;src/turtlebot3&quot;,
-&quot;https://github.com/ROBOTIS-GIT/turtlebot3.git&quot;,
-&quot;master&quot;,
+E.g.
+
+```python
+installfile.git(
+    "src/turtlebot3",
+    "https://github.com/ROBOTIS-GIT/turtlebot3.git",
+    "master",
 )`
+```
 
 **Arguments**:
 

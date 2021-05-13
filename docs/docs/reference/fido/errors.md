@@ -85,14 +85,6 @@ Represents a docker error raised by the underlying docker client.
 
 This is a wrapper around any error raised by the internal docker client.
 
-## NotImplementedError
-
-```python
-class NotImplementedError(Error)
-```
-
-Represents an error for calling a not yet implemented method.
-
 ## DTypeError
 
 ```python

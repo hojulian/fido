@@ -21,7 +21,7 @@ class Odom(DType)
 
 Represents a odometry state.
 
-This is equivalent to ROS&#x27;s nav_msgs/Odometry.
+This is equivalent to ROS's nav_msgs/Odometry.
 
 ## Twist
 
@@ -32,7 +32,7 @@ class Twist(DType)
 
 Represents a twist message.
 
-This is equivalent to ROS&#x27;s geometry_msgs/Twist.
+This is equivalent to ROS's geometry_msgs/Twist.
 
 ## LaserScan
 
@@ -43,7 +43,7 @@ class LaserScan(DType)
 
 Represents a laser scan in 360 degrees.
 
-This is equivalent to ROS&#x27;s sensor_msgs/LaserScan.
+This is equivalent to ROS's sensor_msgs/LaserScan.
 
 ## Image
 
@@ -54,5 +54,5 @@ class Image(DType)
 
 Represents an image.
 
-This is equivalent to ROS&#x27;s sensor_msgs/Image.
+This is equivalent to ROS's sensor_msgs/Image.
 

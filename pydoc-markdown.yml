@@ -13,6 +13,7 @@ renderer:
     descriptive_class_title: false
     add_member_class_prefix: false
     signature_with_def: true
+    escape_html_in_docstring: false
     header_level_by_type:
       Module: 1
       Class: 2

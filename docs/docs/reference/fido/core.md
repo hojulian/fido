@@ -71,7 +71,7 @@ Execute command on container.
 - `cmd` _str_ - Command to execute.
 - `workdir` _str_ - Path to working directory for this exec session.
 - `env` _dict_ - A dictionary of strings in the following format
-- `{&quot;PASSWORD&quot;` - &quot;xxx&quot;}.
+- ``{"PASSWORD"` - "xxx"}`.
 - `stream` _bool_ - Stream response data. Default: False.
   
 
@@ -82,7 +82,7 @@ Execute command on container.
   Exit code for the executed command or None if stream is True.
   
 - `output` - (generator, bytes, or tuple):
-  If stream=True, a generator yielding response chunks. A bytestring
+  If `stream=True`, a generator yielding response chunks. A bytestring
   containing response data otherwise.
   
 
@@ -157,7 +157,7 @@ Set the Docker client connection details.
   `unix:///var/run/docker.sock` or `tcp://127.0.0.1:1234`. Default:
   `unix:///var/run/docker.sock`.
 - `version` _str_ - The version of the API to use. Set to `auto` to
-  automatically detect the server&#x27;s version. Default: `1.35`.
+  automatically detect the server's version. Default: `1.35`.
   
 
 **Raises**:
@@ -175,10 +175,10 @@ Set the Docker client connection details.
 Enable logging for a given node, and its logging level.
 
 This is a legacy feature inherited from `robot_services`. See
-`robot_services`&#x27;s documentation for more details.
+`robot_services`'s documentation for more details.
 
 **Arguments**:
 
 - `node_name` _str_ - The name of the node.
-- `level` _str_ - Description of the log&#x27;s type.
+- `level` _str_ - Description of the log's type.
 

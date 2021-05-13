@@ -37,12 +37,12 @@ Internally, if the simulation is not initialized, it creates a new docker
 container containing the `Simulator`, `World`, and `Robot` needed for the
 simulation. Once the container is started, it will first build all the packages
 in the directory using catkin_make. Then, fido will start the simulation by
-launching the launch file on a seperate thread. Once the launch file is ready,
+launching the launch file on a separate thread. Once the launch file is ready,
 fido will create apersistent connection with ROS master running in the container
 using rosbridge.
 
 If the simulation is initialized, it will simply call `start()` of the
-undelying simulator.
+underlying simulator.
 
 ### ros
 
@@ -120,7 +120,7 @@ This is compatible with Jupyter notebook.
 
 Return the docker container ID of this simulation.
 
-This is used by simulator to execute command on the undelying docker container.
+This is used by simulator to execute command on the underlying docker container.
 
 Although not recommended, this container ID can be used with docker-cli to
 access and manage the simulation container.
