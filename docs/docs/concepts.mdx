@@ -4,21 +4,18 @@ import Mermaid from '@theme/Mermaid';
 
 ## Overview
 
+## Simulation
+
 <Mermaid chart={`
 	graph TD;
 		sim(Simulation);
 		simulator(Simulator);
 		robot(Robot);
 		world(World);
-		tb3(Turtlebot3);
-		rt(RaceTrack);
-		gazebo(Gazebo);
-		simulator --- gazebo;
-		world --- rt;
-		robot --- tb3;
+		sim --> robot;
+		sim --> simulator;
+		sim --> world;
 `}/>
-
-## Simulation
 
 A simulation represents a simulated environment. A [World](#world), [Robot](#robot), and [Simulator](#simulator) jointly forms a Simulation.
 
@@ -80,11 +77,74 @@ robot = Turtlebot3("example-bot", physical=False)
 world.add(robot) # Add simulated robot to world
 ```
 
+A basic structure of a robot looks like this,
+
+<Mermaid chart={`
+	graph TD;
+		s1(Odom Sensor);
+		s2(Lidar Sensor);
+		subgraph functions;
+			move(Move);
+			rotate(Rotate);
+		end;
+		subgraph sensors;
+			s1;
+			s2;
+		end;
+		subgraph fields;
+			x;
+			y;
+			z;
+			range;	
+		end;
+		subgraph robot;
+			fields;
+			functions;
+			sensors;
+		end;
+`}/>
+
 ### Sensor
+
+<Mermaid chart={`
+	graph TD;
+		sensor(Sensor);
+		odom(Odomer);
+		lidar(Lidar);
+		camera(Camera);
+		sensor --> odom;
+		sensor --> lidar;
+		sensor --> camera;
+`}/>
 
 A sensor represents a sensor on the robot.
 
 Internally, a sensor listens to a specific ROS topic and updates the robot's internal state. For instance, a `Odomer` listens to the `/odom` topic and update the robot's `x`, `y`, `z` coordinates. A sensor only starts listening to updates once the simulation has started. It will stop updating once the simulation is destroyed.
+
+<Mermaid chart={`
+	graph TD;
+		s1(Odom Sensor);
+		s2(Lidar Sensor);
+		subgraph functions;
+			move(Move);
+			rotate(Rotate);
+		end;
+		subgraph sensors;
+			s1;
+			s2;
+		end;
+		subgraph fields;
+			s1 -->|updates| x;
+			s1 -->|updates| y;
+			s1 -->|updates| z;
+			s2 -->|updates| range;	
+		end;
+		subgraph robot;
+			fields;
+			functions;
+			sensors;
+		end;
+`}/>
 
 ## Docker
 
